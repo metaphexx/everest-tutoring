@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Everest Tutoring — Elevate Your Marks | Perth ATAR, GATE & UCAT Tutoring</title>
+<meta name="description" content="Perth's small-group tutoring centre for Years 4–12. GATE, ATAR & UCAT programs led by 99+ ATAR tutors. Rated 4.9/5 by parents & students. Book your free trial today." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   EVEREST TUTORING — design tokens
+============================================================ */
+:root{
+  --bg:#06080d;
+  --bg-2:#0a0e16;
+  --panel:#0d121c;
+  --panel-2:#101724;
+  --line:rgba(235,243,255,.09);
+  --line-strong:rgba(235,243,255,.16);
+  --text:#eef3f9;
+  --muted:#92a0b5;
+  --ice:#7fb8ff;
+  --ice-2:#bcdcff;
+  --gold:#f0b35c;
+  --gold-2:#ffd9a0;
+  --radius:18px;
+  --font-d:'Space Grotesk',sans-serif;
+  --font-b:'Inter',sans-serif;
+  --font-s:'Instrument Serif',serif;
+  --ease:cubic-bezier(.65,.05,0,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:auto;}
+html.lenis,html.lenis body{height:auto;}
+.lenis.lenis-smooth{scroll-behavior:auto!important;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-b);
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--ice);color:#06121f;}
+a{color:inherit;text-decoration:none;}
+ul{list-style:none;}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;}
+img,svg{display:block;max-width:100%;}
+h1,h2,h3,h4{font-family:var(--font-d);font-weight:600;line-height:1.04;letter-spacing:-.02em;}
+.serif{font-family:var(--font-s);font-style:italic;font-weight:400;letter-spacing:0;}
+.container{width:min(1240px,92vw);margin:0 auto;}
+section{position:relative;}
+
+/* grain overlay */
+.grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:2000;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 7s steps(10) infinite;}
+@keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-3%,-2%)}30%{transform:translate(2%,3%)}50%{transform:translate(-2%,1%)}70%{transform:translate(3%,-3%)}90%{transform:translate(-1%,2%)}}
+
+/* ============================================================
+   custom cursor
+============================================================ */
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:3000;border-radius:50%;transform:translate(-50%,-50%);}
+.cursor-dot{width:6px;height:6px;background:var(--ice-2);}
+.cursor-ring{width:36px;height:36px;border:1px solid rgba(188,220,255,.45);transition:width .3s var(--ease),height .3s var(--ease),background .3s,border-color .3s;}
+.cursor-ring.is-hover{width:64px;height:64px;background:rgba(127,184,255,.08);border-color:rgba(188,220,255,.8);}
+.cursor-ring .cursor-label{position:absolute;inset:0;display:grid;place-items:center;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ice-2);opacity:0;transition:opacity .25s;font-family:var(--font-d);}
+.cursor-ring.has-label{width:78px;height:78px;background:rgba(8,14,24,.6);backdrop-filter:blur(4px);}
+.cursor-ring.has-label .cursor-label{opacity:1;}
+@media (hover:none),(pointer:coarse){.cursor-dot,.cursor-ring{display:none;}}
+
+/* ============================================================
+   preloader
+============================================================ */
+.preloader{position:fixed;inset:0;z-index:4000;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:26px;}
+.preloader .pre-mark{font-family:var(--font-d);font-weight:700;letter-spacing:.34em;font-size:13px;text-transform:uppercase;color:var(--muted);}
+.preloader .pre-mark span{color:var(--ice-2);}
+.preloader .pre-alt{font-family:var(--font-d);font-size:clamp(56px,10vw,120px);font-weight:600;letter-spacing:-.03em;line-height:1;display:flex;align-items:baseline;gap:8px;}
+.preloader .pre-alt small{font-size:.3em;color:var(--muted);letter-spacing:.1em;}
+.preloader .pre-bar{width:min(320px,60vw);height:1px;background:var(--line-strong);position:relative;overflow:hidden;}
+.preloader .pre-bar i{position:absolute;inset:0;background:linear-gradient(90deg,var(--ice),var(--gold));transform-origin:left;transform:scaleX(0);}
+.preloader .pre-tag{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);}
+
+/* ============================================================
+   nav
+============================================================ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1200;transition:background .45s,border-color .45s,backdrop-filter .45s;border-bottom:1px solid transparent;}
+.nav.scrolled{background:rgba(6,9,14,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-color:var(--line);}
+.nav-inner{width:min(1340px,94vw);margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:20px 0;}
+.logo{display:flex;align-items:center;gap:11px;font-family:var(--font-d);font-weight:700;letter-spacing:.22em;font-size:14px;text-transform:uppercase;}
+.logo .logo-peak{width:30px;height:30px;flex:none;}
+.logo b{color:var(--ice-2);font-weight:700;}
+.nav-links{display:flex;gap:34px;align-items:center;}
+.nav-links a{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);position:relative;padding:4px 0;transition:color .3s;}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--ice-2);transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease);}
+.nav-links a:hover{color:var(--text);}
+.nav-links a:hover::after{transform:scaleX(1);transform-origin:left;}
+.nav-cta{display:inline-flex;}
+.burger{display:none;flex-direction:column;gap:6px;width:40px;height:40px;align-items:center;justify-content:center;z-index:1102;}
+.burger span{display:block;width:24px;height:1.5px;background:var(--text);transition:transform .4s var(--ease),opacity .3s;}
+.burger.open span:nth-child(1){transform:translateY(7.5px) rotate(45deg);}
+.burger.open span:nth-child(2){opacity:0;}
+.burger.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg);}
+
+.mobile-menu{position:fixed;inset:0;z-index:1100;background:rgba(6,9,14,.97);backdrop-filter:blur(20px);display:flex;flex-direction:column;justify-content:center;padding:0 8vw;visibility:hidden;}
+.mobile-menu a.mm-link{font-family:var(--font-d);font-size:clamp(34px,8vw,56px);font-weight:600;letter-spacing:-.02em;padding:10px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;color:var(--text);}
+.mobile-menu a.mm-link em{font-family:var(--font-s);font-style:italic;font-size:.4em;color:var(--muted);}
+.mobile-menu .mm-foot{margin-top:36px;display:flex;gap:24px;color:var(--muted);font-size:13px;letter-spacing:.1em;text-transform:uppercase;flex-wrap:wrap;}
+
+/* ============================================================
+   buttons
+============================================================ */
+.btn{position:relative;display:inline-flex;align-items:center;gap:12px;font-family:var(--font-d);font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:17px 30px;border-radius:100px;overflow:hidden;transition:color .35s;white-space:nowrap;}
+.btn .btn-fill{position:absolute;inset:0;border-radius:100px;transform:translateY(101%);transition:transform .5s var(--ease);}
+.btn span,.btn svg{position:relative;z-index:1;}
+.btn svg{width:14px;height:14px;transition:transform .4s var(--ease);}
+.btn:hover svg{transform:translateX(5px);}
+.btn-primary{background:linear-gradient(135deg,var(--gold),#e09a3a);color:#1d1305;}
+.btn-primary .btn-fill{background:#fff;}
+.btn-primary:hover{color:#0a0e16;}
+.btn-primary:hover .btn-fill{transform:translateY(0);}
+.btn-ghost{border:1px solid var(--line-strong);color:var(--text);}
+.btn-ghost .btn-fill{background:var(--ice-2);}
+.btn-ghost:hover{color:#06121f;border-color:var(--ice-2);}
+.btn-ghost:hover .btn-fill{transform:translateY(0);}
+.btn-sm{padding:12px 22px;font-size:11px;}
+
+/* ============================================================
+   hero
+============================================================ */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 max(7vh,56px);overflow:hidden;}
+#peaks{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+.hero::after{content:"";position:absolute;inset:0;z-index:1;background:
+  radial-gradient(120% 70% at 50% 110%,rgba(6,9,14,.92) 30%,rgba(6,9,14,0) 70%),
+  linear-gradient(180deg,rgba(6,9,14,.55) 0%,rgba(6,9,14,0) 30%);pointer-events:none;}
+.hero-content{position:relative;z-index:2;}
+.hero-rating{display:inline-flex;align-items:center;gap:12px;border:1px solid var(--line-strong);border-radius:100px;padding:9px 18px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:34px;background:rgba(8,13,21,.5);backdrop-filter:blur(8px);}
+.hero-rating .stars{color:var(--gold);letter-spacing:.18em;font-size:13px;}
+.hero-rating b{color:var(--text);font-weight:600;}
+.hero h1{font-size:clamp(56px,9.6vw,148px);text-transform:uppercase;font-weight:600;}
+.hero h1 .h-line{display:block;overflow:hidden;}
+.hero h1 .h-inner{display:block;transform:translateY(112%);}
+.hero h1 .serif{text-transform:none;font-size:1.04em;color:var(--ice-2);margin-right:.08em;}
+.hero h1 .outline{color:transparent;-webkit-text-stroke:1.5px rgba(238,243,249,.85);}
+.hero-sub{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;margin-top:42px;flex-wrap:wrap;}
+.hero-sub p{max-width:430px;color:var(--muted);font-size:17px;}
+.hero-sub p strong{color:var(--text);font-weight:600;}
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+.hero-meta{position:relative;z-index:2;display:flex;gap:0;margin-top:64px;border-top:1px solid var(--line);}
+.hero-meta .hm{flex:1;padding:22px 26px 0 0;display:flex;flex-direction:column;gap:2px;min-width:130px;}
+.hero-meta .hm+.hm{padding-left:26px;border-left:1px solid var(--line);}
+.hero-meta b{font-family:var(--font-d);font-size:26px;font-weight:600;letter-spacing:-.02em;}
+.hero-meta b i{font-style:normal;color:var(--gold);}
+.hero-meta span{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+.scroll-hint{position:absolute;right:4vw;bottom:max(7vh,56px);z-index:2;display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--muted);font-size:10px;letter-spacing:.3em;text-transform:uppercase;writing-mode:vertical-rl;}
+.scroll-hint i{width:1px;height:54px;background:var(--line-strong);position:relative;overflow:hidden;}
+.scroll-hint i::after{content:"";position:absolute;left:0;top:-50%;width:100%;height:50%;background:var(--ice-2);animation:scrollLine 2s var(--ease) infinite;}
+@keyframes scrollLine{0%{top:-50%}100%{top:110%}}
+
+/* ============================================================
+   marquee
+============================================================ */
+.marquee{border-block:1px solid var(--line);padding:26px 0;overflow:hidden;background:var(--bg-2);}
+.marquee-track{display:flex;gap:0;width:max-content;animation:marquee 30s linear infinite;}
+.marquee:hover .marquee-track{animation-play-state:paused;}
+.marquee-track span{font-family:var(--font-d);font-size:clamp(18px,2.4vw,28px);font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:34px;padding-right:34px;white-space:nowrap;transition:color .3s;}
+.marquee-track span:hover{color:var(--ice-2);}
+.marquee-track span::after{content:"✦";font-size:.6em;color:var(--gold);}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ============================================================
+   section heads
+============================================================ */
+.sec{padding:clamp(90px,12vh,150px) 0;}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-bottom:clamp(48px,7vh,84px);flex-wrap:wrap;}
+.sec-eyebrow{display:flex;align-items:center;gap:14px;font-size:11.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:22px;font-family:var(--font-d);font-weight:500;}
+.sec-eyebrow::before{content:"";width:36px;height:1px;background:var(--gold);}
+.sec-title{font-size:clamp(38px,5.6vw,76px);text-transform:uppercase;}
+.sec-title .serif{text-transform:none;color:var(--ice-2);}
+.sec-desc{max-width:420px;color:var(--muted);font-size:16.5px;}
+
+/* ============================================================
+   why / stats
+============================================================ */
+.why{background:var(--bg-2);border-block:1px solid var(--line);}
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
+.why-cell{padding:42px 34px 38px;border-right:1px solid var(--line);background:var(--panel);position:relative;overflow:hidden;transition:background .4s;}
+.why-cell:last-child{border-right:0;}
+.why-cell::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 60% at 50% 0%,rgba(127,184,255,.12),transparent 70%);opacity:0;transition:opacity .45s;}
+.why-cell:hover::before{opacity:1;}
+.why-cell .stat{font-family:var(--font-d);font-size:clamp(44px,4.6vw,64px);font-weight:600;letter-spacing:-.03em;line-height:1;display:flex;align-items:baseline;}
+.why-cell .stat sup{font-size:.42em;color:var(--gold);margin-left:4px;}
+.why-cell h4{margin:16px 0 8px;font-size:16px;letter-spacing:.02em;}
+.why-cell p{color:var(--muted);font-size:14px;}
+.why-foot{display:flex;align-items:center;justify-content:space-between;margin-top:46px;gap:28px;flex-wrap:wrap;}
+.why-foot p{color:var(--muted);max-width:640px;font-size:17px;}
+.why-foot p em{font-family:var(--font-s);color:var(--ice-2);font-size:1.12em;}
+
+/* ============================================================
+   programs — horizontal ascent
+============================================================ */
+.programs{background:var(--bg);}
+.programs-pin{height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;position:relative;}
+.programs-topbar{width:min(1240px,92vw);margin:0 auto;display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:38px;gap:30px;}
+.altimeter{font-family:var(--font-d);font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:14px;}
+.altimeter b{color:var(--gold);font-size:22px;letter-spacing:0;min-width:130px;text-align:right;font-weight:600;}
+.programs-track{display:flex;gap:26px;padding-left:max(4vw,calc((100vw - 1240px)/2));padding-right:8vw;width:max-content;align-items:stretch;}
+.program-card{width:min(440px,82vw);flex:none;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(170deg,var(--panel-2),var(--panel) 60%);padding:38px 36px;display:flex;flex-direction:column;min-height:430px;position:relative;overflow:hidden;transition:border-color .4s,transform .4s var(--ease);}
+.program-card:hover{border-color:rgba(127,184,255,.4);transform:translateY(-8px);}
+.program-card::after{content:"";position:absolute;right:-40px;bottom:-40px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(127,184,255,.13),transparent 70%);opacity:0;transition:opacity .45s;}
+.program-card:hover::after{opacity:1;}
+.pc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:auto;}
+.pc-num{font-family:var(--font-d);font-size:13px;letter-spacing:.2em;color:var(--muted);}
+.pc-alt{font-family:var(--font-d);font-size:12px;letter-spacing:.14em;color:var(--gold);border:1px solid rgba(240,179,92,.35);padding:6px 13px;border-radius:100px;}
+.program-card h3{font-size:clamp(26px,2.6vw,34px);margin:84px 0 6px;text-transform:uppercase;}
+.program-card .pc-sub{font-family:var(--font-s);font-style:italic;color:var(--ice-2);font-size:19px;margin-bottom:18px;}
+.program-card p{color:var(--muted);font-size:15px;margin-bottom:22px;}
+.pc-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px;}
+.pc-tags li{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ice-2);border:1px solid var(--line-strong);padding:6px 12px;border-radius:100px;}
+.pc-link{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-d);font-size:12.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--text);margin-top:auto;}
+.pc-link svg{width:14px;height:14px;transition:transform .35s var(--ease);}
+.pc-link:hover svg{transform:translateX(6px);}
+.program-card.summit{background:linear-gradient(170deg,#1b2436,#0e1521 60%);border-color:rgba(240,179,92,.4);}
+.program-card.summit .pc-alt{background:var(--gold);color:#1d1305;border-color:var(--gold);}
+
+/* ============================================================
+   tutors
+============================================================ */
+.tutors{background:var(--bg-2);border-block:1px solid var(--line);}
+.tutor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+.tutor-card{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);overflow:hidden;transition:transform .45s var(--ease),border-color .4s;}
+.tutor-card:hover{transform:translateY(-10px);border-color:rgba(127,184,255,.4);}
+.tutor-visual{aspect-ratio:1/.82;position:relative;display:grid;place-items:center;overflow:hidden;border-bottom:1px solid var(--line);}
+.tutor-visual::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(90% 90% at 30% 20%,rgba(127,184,255,.22),transparent 60%),
+  radial-gradient(80% 80% at 80% 90%,rgba(240,179,92,.13),transparent 60%),
+  var(--panel-2);}
+.tutor-visual .tv-initial{position:relative;font-family:var(--font-d);font-size:120px;font-weight:700;color:transparent;-webkit-text-stroke:1.5px rgba(188,220,255,.6);line-height:1;transition:transform .6s var(--ease);}
+.tutor-card:hover .tv-initial{transform:scale(1.12) rotate(-4deg);}
+.tutor-visual .tv-atar{position:absolute;top:18px;right:18px;background:rgba(8,13,21,.7);backdrop-filter:blur(6px);border:1px solid rgba(240,179,92,.4);color:var(--gold);font-family:var(--font-d);font-size:12px;letter-spacing:.1em;padding:8px 14px;border-radius:100px;}
+.tutor-info{padding:26px 28px 30px;}
+.tutor-info h3{font-size:24px;margin-bottom:4px;}
+.tutor-info .t-role{font-family:var(--font-s);font-style:italic;color:var(--ice-2);font-size:17px;margin-bottom:14px;}
+.tutor-info p{color:var(--muted);font-size:14.5px;}
+
+/* ============================================================
+   testimonials
+============================================================ */
+.testi{overflow:hidden;}
+.testi .sec-head{width:min(1240px,92vw);margin-left:auto;margin-right:auto;}
+.t-rows{display:flex;flex-direction:column;gap:24px;}
+.t-row{display:flex;gap:24px;width:max-content;}
+.t-row-1{animation:tmarq 46s linear infinite;}
+.t-row-2{animation:tmarq 46s linear infinite reverse;}
+.t-rows:hover .t-row{animation-play-state:paused;}
+@keyframes tmarq{to{transform:translateX(-50%)}}
+.t-card{width:420px;flex:none;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);padding:30px 32px;display:flex;flex-direction:column;gap:18px;transition:border-color .35s,background .35s;}
+.t-card:hover{border-color:rgba(240,179,92,.45);background:var(--panel-2);}
+.t-card .t-stars{color:var(--gold);letter-spacing:.2em;font-size:14px;}
+.t-card blockquote{font-size:16.5px;color:var(--text);line-height:1.6;font-style:normal;}
+.t-card .t-name{display:flex;align-items:center;gap:12px;margin-top:auto;color:var(--muted);font-size:13.5px;letter-spacing:.06em;}
+.t-card .t-name i{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--ice),var(--gold));display:grid;place-items:center;font-style:normal;font-family:var(--font-d);font-weight:700;font-size:12px;color:#0a0e16;flex:none;}
+
+/* ============================================================
+   pricing
+============================================================ */
+.pricing{background:var(--bg-2);border-block:1px solid var(--line);}
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;align-items:stretch;}
+.price-card{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);padding:40px 36px;display:flex;flex-direction:column;position:relative;transition:transform .45s var(--ease),border-color .4s;}
+.price-card:hover{transform:translateY(-10px);}
+.price-card.popular{background:linear-gradient(170deg,#161f30,#0e1521 70%);border-color:rgba(240,179,92,.5);}
+.price-card .badge{position:absolute;top:-13px;left:36px;background:var(--gold);color:#1d1305;font-family:var(--font-d);font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:7px 16px;border-radius:100px;}
+.price-card h3{font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500;}
+.price-card .amount{font-family:var(--font-d);font-size:clamp(48px,4.6vw,66px);font-weight:600;letter-spacing:-.03em;margin:18px 0 4px;display:flex;align-items:baseline;gap:6px;}
+.price-card .amount small{font-size:15px;color:var(--muted);font-weight:400;letter-spacing:0;}
+.price-card .per{color:var(--muted);font-size:13.5px;margin-bottom:26px;}
+.price-card ul{display:flex;flex-direction:column;gap:13px;margin-bottom:34px;}
+.price-card ul li{display:flex;gap:12px;font-size:14.5px;color:var(--muted);align-items:flex-start;}
+.price-card ul li::before{content:"✦";color:var(--gold);font-size:11px;margin-top:4px;flex:none;}
+.price-card .btn{margin-top:auto;justify-content:center;}
+.price-note{margin-top:34px;text-align:center;color:var(--muted);font-size:14px;}
+.price-note em{font-family:var(--font-s);color:var(--ice-2);font-size:1.1em;}
+
+/* ============================================================
+   faq
+============================================================ */
+.faq-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:64px;align-items:start;}
+.faq-item{border-bottom:1px solid var(--line);}
+.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:26px 0;text-align:left;font-family:var(--font-d);font-size:clamp(17px,1.6vw,20px);font-weight:500;letter-spacing:-.01em;transition:color .3s;}
+.faq-q:hover{color:var(--ice-2);}
+.faq-q .faq-icon{width:34px;height:34px;border:1px solid var(--line-strong);border-radius:50%;display:grid;place-items:center;flex:none;transition:transform .45s var(--ease),background .35s,border-color .35s;}
+.faq-q .faq-icon svg{width:12px;height:12px;}
+.faq-item.open .faq-icon{transform:rotate(45deg);background:var(--ice-2);border-color:var(--ice-2);color:#06121f;}
+.faq-a{max-height:0;overflow:hidden;}
+.faq-a p{padding:0 44px 26px 0;color:var(--muted);font-size:15.5px;}
+.faq-aside{position:sticky;top:120px;}
+.faq-aside .sec-title{font-size:clamp(34px,4vw,56px);}
+
+/* ============================================================
+   contact / cta
+============================================================ */
+.contact{background:linear-gradient(180deg,var(--bg-2),var(--bg));border-top:1px solid var(--line);overflow:hidden;}
+.contact-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:72px;align-items:start;}
+.contact h2{font-size:clamp(42px,5.4vw,72px);text-transform:uppercase;margin-bottom:22px;}
+.contact h2 .serif{text-transform:none;color:var(--ice-2);}
+.contact .c-lead{color:var(--muted);font-size:17px;max-width:460px;margin-bottom:42px;}
+.c-rows{display:flex;flex-direction:column;border-top:1px solid var(--line);}
+.c-row{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:20px 0;border-bottom:1px solid var(--line);font-size:15px;}
+.c-row span{color:var(--muted);font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-family:var(--font-d);}
+.c-row a{font-family:var(--font-d);font-size:17px;transition:color .3s;}
+.c-row a:hover{color:var(--gold);}
+.c-row address{font-style:normal;text-align:right;font-size:14.5px;color:var(--text);line-height:1.5;}
+.form-card{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);padding:40px 38px;}
+.form-card h3{font-size:22px;margin-bottom:6px;}
+.form-card .f-sub{color:var(--muted);font-size:14px;margin-bottom:30px;}
+.f-field{position:relative;margin-bottom:22px;}
+.f-field label{display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:9px;font-family:var(--font-d);}
+.f-field input,.f-field select,.f-field textarea{width:100%;background:var(--bg-2);border:1px solid var(--line-strong);border-radius:10px;padding:14px 16px;color:var(--text);font:inherit;font-size:15px;transition:border-color .3s,box-shadow .3s;appearance:none;}
+.f-field textarea{resize:vertical;min-height:96px;}
+.f-field input:focus,.f-field select:focus,.f-field textarea:focus{outline:none;border-color:var(--ice);box-shadow:0 0 0 3px rgba(127,184,255,.15);}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.form-card .btn{width:100%;justify-content:center;margin-top:6px;}
+.form-ok{display:none;text-align:center;padding:40px 10px;}
+.form-ok .ok-flag{font-size:42px;margin-bottom:14px;}
+.form-ok h4{font-size:22px;margin-bottom:8px;}
+.form-ok p{color:var(--muted);font-size:14.5px;}
+
+/* ============================================================
+   footer
+============================================================ */
+.footer{border-top:1px solid var(--line);padding:64px 0 0;overflow:hidden;background:var(--bg);}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:44px;margin-bottom:64px;}
+.footer h5{font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;font-family:var(--font-d);font-weight:500;}
+.footer .f-brand p{color:var(--muted);font-size:14.5px;max-width:300px;margin-top:18px;}
+.footer ul li{margin-bottom:12px;}
+.footer ul a{color:var(--muted);font-size:14.5px;transition:color .3s;position:relative;}
+.footer ul a:hover{color:var(--ice-2);}
+.footer-mark{font-family:var(--font-d);font-weight:700;font-size:clamp(64px,14vw,200px);letter-spacing:.04em;text-transform:uppercase;text-align:center;line-height:.86;color:transparent;-webkit-text-stroke:1px rgba(238,243,249,.16);user-select:none;white-space:nowrap;transition:color 1s,-webkit-text-stroke-color .6s;}
+.footer-mark:hover{-webkit-text-stroke-color:rgba(127,184,255,.45);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:26px 0;border-top:1px solid var(--line);margin-top:-22px;color:var(--muted);font-size:12.5px;letter-spacing:.06em;flex-wrap:wrap;}
+
+/* reveal helpers */
+[data-reveal]{opacity:0;transform:translateY(44px);}
+html.no-js [data-reveal],html.reduced [data-reveal]{opacity:1;transform:none;}
+
+/* ============================================================
+   responsive
+============================================================ */
+@media(max-width:1080px){
+  .why-grid{grid-template-columns:repeat(2,1fr);}
+  .why-cell:nth-child(2){border-right:0;}
+  .why-cell:nth-child(-n+2){border-bottom:1px solid var(--line);}
+  .tutor-grid{grid-template-columns:1fr;max-width:560px;margin:0 auto;}
+  .price-grid{grid-template-columns:1fr;max-width:560px;margin:0 auto;}
+  .faq-grid{grid-template-columns:1fr;gap:40px;}
+  .faq-aside{position:static;}
+  .contact-grid{grid-template-columns:1fr;gap:52px;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:860px){
+  .hero{padding-top:118px;min-height:0;}
+  .hero h1{font-size:clamp(42px,12.5vw,56px);}
+  .hero-rating{font-size:10.5px;padding:8px 14px;margin-bottom:26px;}
+  .hero-sub{margin-top:30px;}
+  .hero-meta{margin-top:46px;}
+  .nav-links{display:none;}
+  .nav-cta{display:none;}
+  .burger{display:flex;}
+  .programs-pin{height:auto;padding:0;overflow:visible;}
+  .programs-track{flex-direction:column;width:auto;padding:0 4vw;}
+  .program-card{width:100%;min-height:0;}
+  .program-card h3{margin-top:46px;}
+  .altimeter{display:none;}
+  .hero-meta{flex-wrap:wrap;}
+  .hero-meta .hm{min-width:42%;padding:18px 14px 0 0;}
+  .hero-meta .hm:nth-child(3){border-left:0;padding-left:0;}
+  .scroll-hint{display:none;}
+  .t-card{width:320px;}
+  .f-row{grid-template-columns:1fr;}
+  .c-row{flex-direction:column;align-items:flex-start;gap:6px;}
+  .c-row address{text-align:left;}
+}
+@media (prefers-reduced-motion:reduce){
+  .marquee-track,.t-row,.scroll-hint i::after,.grain{animation:none!important;}
+  *{transition-duration:.01ms!important;}
+}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+<div class="cursor-ring" aria-hidden="true"><span class="cursor-label">View</span></div>
+
+<!-- ================= PRELOADER ================= -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="pre-mark">EVEREST <span>TUTORING</span></div>
+  <div class="pre-alt"><span id="preAlt">0</span><small>M&nbsp;ALTITUDE</small></div>
+  <div class="pre-bar"><i id="preBar"></i></div>
+  <div class="pre-tag">Preparing your ascent</div>
+</div>
+
+<!-- ================= NAV ================= -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="logo" data-cursor>
+      <svg class="logo-peak" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <path d="M3 26L13 8l4 7 3-5 9 16H3z" stroke="#bcdcff" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M13 8l2.6 4.6L13 15l-2.8-2.4L13 8z" fill="#f0b35c"/>
+      </svg>
+      EVEREST<b>TUTORING</b>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#programs">Programs</a>
+      <a href="#tutors">Tutors</a>
+      <a href="#results">Results</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a href="#contact" class="btn btn-primary btn-sm nav-cta magnetic" data-cursor><span class="btn-fill"></span><span>Free Trial</span></a>
+    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <a class="mm-link" href="#programs">Programs <em>Years 4–12</em></a>
+  <a class="mm-link" href="#tutors">Tutors <em>99+ ATAR</em></a>
+  <a class="mm-link" href="#results">Results <em>4.9 ★</em></a>
+  <a class="mm-link" href="#pricing">Pricing <em>from $350/term</em></a>
+  <a class="mm-link" href="#contact">Free Trial <em>book now</em></a>
+  <div class="mm-foot"><span>Harrisdale</span><span>Willetton</span><a href="tel:0404604673">0404 604 673</a></div>
+</div>
+
+<main id="top">
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="hero">
+  <canvas id="peaks" aria-hidden="true"></canvas>
+  <div class="container hero-content">
+    <div class="hero-rating" data-hero-fade>
+      <span class="stars" aria-hidden="true">★★★★★</span>
+      <span>Rated <b>4.9/5</b> by Perth parents &amp; students</span>
+    </div>
+    <h1 aria-label="Elevate your marks. Reach your summit.">
+      <span class="h-line"><span class="h-inner">Elevate <span class="serif">your</span></span></span>
+      <span class="h-line"><span class="h-inner">marks<span style="color:var(--gold)">.</span> <span class="outline">Reach</span></span></span>
+      <span class="h-line"><span class="h-inner"><span class="outline">your</span> summit<span style="color:var(--gold)">.</span></span></span>
+    </h1>
+    <div class="hero-sub">
+      <p data-hero-fade>Perth's small-group tutoring centre for <strong>Years 4–12</strong> — GATE, ATAR &amp; UCAT programs designed and taught by <strong>99+ ATAR tutors</strong> who sat your exams and summited them.</p>
+      <div class="hero-ctas" data-hero-fade>
+        <a href="#contact" class="btn btn-primary magnetic" data-cursor><span class="btn-fill"></span><span>Book your free trial</span><svg viewBox="0 0 16 16" fill="none"><path d="M1 8h13M9 3l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></a>
+        <a href="#programs" class="btn btn-ghost magnetic" data-cursor><span class="btn-fill"></span><span>Explore programs</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="container hero-meta" data-hero-fade>
+    <div class="hm"><b><i data-count="99.85" data-decimals="2">0</i></b><span>Top tutor ATAR</span></div>
+    <div class="hm"><b><i data-count="4.9" data-decimals="1">0</i><sup style="color:var(--gold);font-size:.5em">★</sup></b><span>Google rating</span></div>
+    <div class="hm"><b><i data-count="10">0</i> max</b><span>Students per class</span></div>
+    <div class="hm"><b>24/7</b><span>Discord &amp; IG support</span></div>
+  </div>
+  <div class="scroll-hint" aria-hidden="true">Begin the climb<i></i></div>
+</section>
+
+<!-- ================= MARQUEE ================= -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="marqueeTrack">
+    <span>Maths Methods</span><span>Specialist</span><span>Chemistry</span><span>Physics</span><span>English</span><span>Human Biology</span><span>Economics</span><span>GATE Prep</span><span>UCAT</span><span>NAPLAN</span><span>WACE Revision</span>
+  </div>
+</div>
+
+<!-- ================= WHY ================= -->
+<section class="why sec" id="results">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <div class="sec-eyebrow" data-reveal>Why Everest</div>
+        <h2 class="sec-title" data-reveal>Built by students <br/><span class="serif">who reached the top</span></h2>
+      </div>
+      <p class="sec-desc" data-reveal>No recycled worksheets. No 30-kid lecture halls. Just recent 99+ ATAR graduates teaching small classes with materials they wrote themselves.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-cell" data-reveal>
+        <div class="stat"><span data-count="99.85" data-decimals="2">0</span></div>
+        <h4>Top tutor ATAR</h4>
+        <p>Our founders scored in the top 0.15% of Western Australia.</p>
+      </div>
+      <div class="why-cell" data-reveal>
+        <div class="stat"><span data-count="7">0</span>–<span data-count="10">0</span></div>
+        <h4>Students per class</h4>
+        <p>Small groups, capped hard — every student gets airtime, every week.</p>
+      </div>
+      <div class="why-cell" data-reveal>
+        <div class="stat"><span data-count="4">0</span><sup>+ yrs</sup></div>
+        <h4>Teaching experience</h4>
+        <p>Hundreds of hours refining how each topic is actually learned.</p>
+      </div>
+      <div class="why-cell" data-reveal>
+        <div class="stat">&lt;<span data-count="1">0</span><sup>hr</sup></div>
+        <h4>Support response</h4>
+        <p>Stuck at 9pm before a test? Message us on Discord or Instagram.</p>
+      </div>
+    </div>
+    <div class="why-foot" data-reveal>
+      <p>We're not a franchise. We're a Perth team that climbed the ATAR mountain recently enough to remember <em>exactly</em> where the crevasses are — and we hand our students the map.</p>
+      <a href="#contact" class="btn btn-ghost magnetic" data-cursor><span class="btn-fill"></span><span>Meet us free</span><svg viewBox="0 0 16 16" fill="none"><path d="M1 8h13M9 3l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROGRAMS (horizontal ascent) ================= -->
+<section class="programs" id="programs">
+  <div class="programs-pin" id="programsPin">
+    <div class="programs-topbar">
+      <div>
+        <div class="sec-eyebrow">The Ascent</div>
+        <h2 class="sec-title">Your route <span class="serif">to the summit</span></h2>
+      </div>
+      <div class="altimeter" aria-hidden="true">Altitude <b id="altimeter">1,300 m</b></div>
+    </div>
+    <div class="programs-track" id="programsTrack">
+
+      <article class="program-card" data-cursor-label="Camp 1">
+        <div class="pc-top"><span class="pc-num">01 / BASE CAMP</span><span class="pc-alt">YEARS 4–6</span></div>
+        <h3>GATE Preparation</h3>
+        <div class="pc-sub">For gifted &amp; talented entry</div>
+        <p>Sharpen abstract reasoning, reading comprehension and quantitative skills for WA's GATE selective-school exams — with a free mock exam to benchmark where you stand.</p>
+        <ul class="pc-tags"><li>Free mock exam</li><li>Abstract reasoning</li><li>Writing</li></ul>
+        <a class="pc-link" href="#contact">Start here <svg viewBox="0 0 16 16" fill="none"><path d="M1 8h13M9 3l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></a>
+      </article>
+
+      <article class="program-card" data-cursor-label="Camp 2">
+        <div class="pc-top"><span class="pc-num">02 / CAMP TWO</span><span class="pc-alt">YEARS 7–10</span></div>
+        <h3>Foundations</h3>
+        <div class="pc-sub">English · Maths · Science</div>
+        <p>The years that decide your ATAR pathway. We build rock-solid fundamentals, exam technique and confidence before the stakes get high — including NAPLAN masterclasses for Years 7 &amp; 9.</p>
+        <ul class="pc-tags"><li>English</li><li>Maths</li><li>Science</li><li>NAPLAN</li></ul>
+        <a class="pc-link" href="#contact">Build the base <svg viewBox="0 0 16 16" fill="none"><path d="M1 8h13M9 3l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></a>
+      </article>
+
+      <article class="program-card summit" data-cursor-label="Summit push">
+        <div class="pc-top"><span class="pc-num">03 / SUMMIT PUSH</span><span class="pc-alt">YEARS 11–12</span></div>
+        <h3>ATAR Courses</h3>
+        <div class="pc-sub">Maximise your ATAR</div>
+        <p>Methods, Specialist, Chemistry, Physics, Human Biology, English, Economics &amp; more — taught by tutors who scored 99+, with exclusive notes, worksheets and WACE revision masterclasses.</p>
+        <ul class="pc-tags"><li>Methods</li><li>Specialist</li><li>Chem</li><li>Physics</li><li>English</li><li>+4 more</li></ul>
+        <a class="pc-link" href="#contact">Push for the top <svg viewBox="0 0 16 16" fill="none"><path d="M1 8h13M9 3l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></a>
+      </article>
+
+      <article class="program-card" data-cursor-label="Beyond">
+        <div class="pc-top"><span class="pc-num">04 / BEYOND</span><span class="pc-alt">MED PATHWAY</span></div>
+        <h3>UCAT &amp; Interviews</h3>
+        <div class="pc-sub">Medicine &amp; dentistry entry</div>
+        <p>Taught by current UWA Doctor of Medicine students who aced it themselves: UCAT strategy, MMI interview coaching and CASPer crash courses for Curtin.</p>
+        <ul class="pc-tags"><li>UCAT</li><li>MMI interviews</li><li>CASPer</li></ul>
+        <a class="pc-link" href="#contact">Go beyond <svg viewBox="0 0 16 16" fill="none"><path d="M1 8h13M9 3l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></a>
+      </article>
+
+      <article class="program-card" data-cursor-label="Boost">
+        <div class="pc-top"><span class="pc-num">05 / ACCLIMATISE</span><span class="pc-alt">HOLIDAYS</span></div>
+        <h3>Masterclasses</h3>
+        <div class="pc-sub">Intensive holiday programs</div>
+        <p>While others rest, our students climb. ATAR holiday masterclasses from $15/hour, NAPLAN intensives and WACE revision blocks that turn breaks into breakthroughs.</p>
+        <ul class="pc-tags"><li>From $15/hr</li><li>ATAR revision</li><li>WACE prep</li></ul>
+        <a class="pc-link" href="#contact">Use the break <svg viewBox="0 0 16 16" fill="none"><path d="M1 8h13M9 3l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= TUTORS ================= -->
+<section class="tutors sec" id="tutors">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <div class="sec-eyebrow" data-reveal>The Guides</div>
+        <h2 class="sec-title" data-reveal>Learn from those <br/><span class="serif">who've been there</span></h2>
+      </div>
+      <p class="sec-desc" data-reveal>Every Everest tutor recently topped the exact exams your child is preparing for — and remembers what it took.</p>
+    </div>
+    <div class="tutor-grid">
+      <article class="tutor-card" data-reveal data-cursor>
+        <div class="tutor-visual"><span class="tv-initial">H</span><span class="tv-atar">99.85 ATAR</span></div>
+        <div class="tutor-info">
+          <h3>Hari</h3>
+          <div class="t-role">Co-founder · Doctor of Medicine, UWA</div>
+          <p>Scored in WA's top 0.15%. Teaches senior Maths and Sciences, and runs the UCAT &amp; interview program drawing on his own med-entry journey.</p>
+        </div>
+      </article>
+      <article class="tutor-card" data-reveal data-cursor>
+        <div class="tutor-visual"><span class="tv-initial">A</span><span class="tv-atar">99.85 ATAR</span></div>
+        <div class="tutor-info">
+          <h3>Abilaash</h3>
+          <div class="t-role">Co-founder · Doctor of Medicine, UWA</div>
+          <p>99.85 ATAR and 4+ years of teaching. Known for making Methods and Chemistry click for students who thought they "just weren't maths people".</p>
+        </div>
+      </article>
+      <article class="tutor-card" data-reveal data-cursor>
+        <div class="tutor-visual"><span class="tv-initial">A</span><span class="tv-atar">99.30 ATAR</span></div>
+        <div class="tutor-info">
+          <h3>Aaron</h3>
+          <div class="t-role">Biomedical Engineering, UWA</div>
+          <p>Specialist in Physics and senior Maths. Breaks intimidating problems into steps so clean that students wonder why school never taught it that way.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TESTIMONIALS ================= -->
+<section class="testi sec">
+  <div class="sec-head">
+    <div>
+      <div class="sec-eyebrow" data-reveal>From the trail</div>
+      <h2 class="sec-title" data-reveal>Parents &amp; students <span class="serif">on the climb</span></h2>
+    </div>
+    <p class="sec-desc" data-reveal>4.9/5 average from Google reviews. Here's what the people who matter say.</p>
+  </div>
+  <div class="t-rows" aria-label="Testimonials">
+    <div class="t-row t-row-1" id="tRow1">
+      <div class="t-card"><div class="t-stars">★★★★★</div><blockquote>"Very professional, very friendly and most importantly very smart. Everest Tutoring is a good investment, guaranteed."</blockquote><div class="t-name"><i>M</i>Mitul Rajaram · Parent</div></div>
+      <div class="t-card"><div class="t-stars">★★★★★</div><blockquote>"The tutors are experienced, helpful and professional. I'd recommend them to any parent wanting to help their children through the difficult times that Year 11 and 12 can be."</blockquote><div class="t-name"><i>Z</i>Zakwan Plewright</div></div>
+      <div class="t-card"><div class="t-stars">★★★★★</div><blockquote>"Have had the amazing opportunity to work with these brilliant tutors — very competent and dedicated people. Definitely would recommend their service."</blockquote><div class="t-name"><i>T</i>Tony Liyang</div></div>
+      <div class="t-card"><div class="t-stars">★★★★★</div><blockquote>"This is one of the best tutoring businesses I have ever seen!!"</blockquote><div class="t-name"><i>M</i>Maxwell Xu · Student</div></div>
+    </div>
+    <div class="t-row t-row-2" id="tRow2">
+      <div class="t-card"><div class="t-stars">★★★★★</div><blockquote>"I'm so glad and happy with your tutoring services! You've got a fantastic team of tutors."</blockquote><div class="t-name"><i>A</i>Arun S · Parent</div></div>
+      <div class="t-card"><div class="t-stars">★★★★★</div><blockquote>"Such a great service. Highly recommend."</blockquote><div class="t-name"><i>A</i>Azhar Kyaw</div></div>
+      <div class="t-card"><div class="t-stars">★★★★★</div><blockquote>"Amazing tutors, would recommend to everyone."</blockquote><div class="t-name"><i>J</i>Jeremy K · Student</div></div>
+      <div class="t-card"><div class="t-stars">★★★★★</div><blockquote>"Great people, very helpful."</blockquote><div class="t-name"><i>R</i>Romit Dave</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRICING ================= -->
+<section class="pricing sec" id="pricing">
+  <div class="container">
+    <div class="sec-head">
+      <div>
+        <div class="sec-eyebrow" data-reveal>Investment</div>
+        <h2 class="sec-title" data-reveal>Simple, honest <span class="serif">term pricing</span></h2>
+      </div>
+      <p class="sec-desc" data-reveal>Year 9 example shown — a full 10-week term, all materials included. Pricing scales by year level; your first lesson is always free.</p>
+    </div>
+    <div class="price-grid">
+      <div class="price-card" data-reveal>
+        <h3>One Subject</h3>
+        <div class="amount"><small>$</small><span data-count="350">0</span></div>
+        <div class="per">per 10-week term · ~$35/class</div>
+        <ul>
+          <li>1 hr weekly small-group class</li>
+          <li>All notes &amp; worksheets included</li>
+          <li>24/7 Discord &amp; Instagram support</li>
+          <li>Free first lesson</li>
+        </ul>
+        <a href="#contact" class="btn btn-ghost magnetic" data-cursor><span class="btn-fill"></span><span>Start free</span></a>
+      </div>
+      <div class="price-card popular" data-reveal>
+        <span class="badge">Most chosen</span>
+        <h3>Two Subjects</h3>
+        <div class="amount"><small>$</small><span data-count="600">0</span></div>
+        <div class="per">per 10-week term · save $100</div>
+        <ul>
+          <li>2 hrs weekly across two subjects</li>
+          <li>All notes &amp; worksheets included</li>
+          <li>Priority 24/7 support channels</li>
+          <li>Holiday masterclass priority access</li>
+          <li>Free first lesson</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary magnetic" data-cursor><span class="btn-fill"></span><span>Start free</span></a>
+      </div>
+      <div class="price-card" data-reveal>
+        <h3>Three Subjects</h3>
+        <div class="amount"><small>$</small><span data-count="800">0</span></div>
+        <div class="per">per 10-week term · save $250</div>
+        <ul>
+          <li>3 hrs weekly, full subject coverage</li>
+          <li>All notes &amp; worksheets included</li>
+          <li>Priority 24/7 support channels</li>
+          <li>Holiday masterclass priority access</li>
+          <li>Free first lesson</li>
+        </ul>
+        <a href="#contact" class="btn btn-ghost magnetic" data-cursor><span class="btn-fill"></span><span>Start free</span></a>
+      </div>
+    </div>
+    <p class="price-note" data-reveal>Year 6 terms from ~$300 · Year 12 packages up to $1,250 · <em>Every journey begins with a free trial lesson — no card, no commitment.</em></p>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="sec" id="faq">
+  <div class="container faq-grid">
+    <div class="faq-aside">
+      <div class="sec-eyebrow" data-reveal>Before you climb</div>
+      <h2 class="sec-title" data-reveal>Questions, <br/><span class="serif">answered</span></h2>
+      <p class="sec-desc" data-reveal style="margin-top:22px;">Can't find what you need? Message us — we typically reply within the hour.</p>
+      <div style="margin-top:30px;" data-reveal>
+        <a href="#contact" class="btn btn-primary magnetic" data-cursor><span class="btn-fill"></span><span>Ask us anything</span></a>
+      </div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item" data-reveal>
+        <button class="faq-q" aria-expanded="false">How do the small-group classes work?<span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5"/></svg></span></button>
+        <div class="faq-a"><p>Classes run for 1 hour per subject, weekly, with 7–10 students maximum. Small enough that your tutor knows exactly where you're at; collaborative enough that you learn from your peers' questions too.</p></div>
+      </div>
+      <div class="faq-item" data-reveal>
+        <button class="faq-q" aria-expanded="false">Is the first lesson really free?<span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5"/></svg></span></button>
+        <div class="faq-a"><p>Yes — completely. Sit a full class, meet the tutor, take the materials home. If it's not the right fit, you owe nothing and we'll point you in the right direction anyway.</p></div>
+      </div>
+      <div class="faq-item" data-reveal>
+        <button class="faq-q" aria-expanded="false">What does "24/7 support" actually mean?<span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5"/></svg></span></button>
+        <div class="faq-a"><p>Every student joins our private Discord server and Instagram group chats. Stuck on a question at any hour, send it through — responses typically land within the hour, even on weekends.</p></div>
+      </div>
+      <div class="faq-item" data-reveal>
+        <button class="faq-q" aria-expanded="false">Where are classes held?<span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5"/></svg></span></button>
+        <div class="faq-a"><p>Two centres: Harrisdale (3/723 Ranford Road) and Willetton (Unit 3b/113 High Road), plus school partnerships at Harrisdale SHS and Perth Modern. Weekday evenings and full weekend timetables available.</p></div>
+      </div>
+      <div class="faq-item" data-reveal>
+        <button class="faq-q" aria-expanded="false">Do you provide study materials?<span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5"/></svg></span></button>
+        <div class="faq-a"><p>Everything is included: specialised worksheets for each topic, thorough notes, practice questions and exclusive study resources written by our 99+ ATAR tutors — not photocopied from a textbook.</p></div>
+      </div>
+      <div class="faq-item" data-reveal>
+        <button class="faq-q" aria-expanded="false">Can you help with medicine &amp; dentistry entry?<span class="faq-icon"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5"/></svg></span></button>
+        <div class="faq-a"><p>That's our home turf. Our founders are current UWA Doctor of Medicine students — we run UCAT preparation, MMI interview coaching and CASPer crash courses built from firsthand, recent experience.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="contact sec" id="contact">
+  <div class="container contact-grid">
+    <div>
+      <div class="sec-eyebrow" data-reveal>Base camp check-in</div>
+      <h2 data-reveal>Start the climb <br/><span class="serif">with a free lesson</span></h2>
+      <p class="c-lead" data-reveal>Tell us the year level and subjects, and we'll match you to a class this week. No payment details, no lock-in — just one great lesson to see the difference.</p>
+      <div class="c-rows" data-reveal>
+        <div class="c-row"><span>Phone</span><a href="tel:0404604673" data-cursor>0404 604 673</a></div>
+        <div class="c-row"><span>Email</span><a href="mailto:info@everesttutoring.com.au" data-cursor>info@everesttutoring.com.au</a></div>
+        <div class="c-row"><span>Harrisdale</span><address>3/723 Ranford Road, Harrisdale WA 6112</address></div>
+        <div class="c-row"><span>Willetton</span><address>Unit 3b/113 High Rd, Willetton WA 6155</address></div>
+        <div class="c-row"><span>Hours</span><address>Mon–Thu 5–8:30pm · Sat 9:30am–6pm · Sun 9am–7:30pm</address></div>
+      </div>
+    </div>
+    <div class="form-card" data-reveal>
+      <form id="trialForm" novalidate>
+        <h3>Book your free trial</h3>
+        <p class="f-sub">We'll reply within the hour during opening times.</p>
+        <div class="f-row">
+          <div class="f-field"><label for="fName">Parent / student name</label><input id="fName" name="name" type="text" required placeholder="Alex Chen" /></div>
+          <div class="f-field"><label for="fPhone">Phone</label><input id="fPhone" name="phone" type="tel" required placeholder="04xx xxx xxx" /></div>
+        </div>
+        <div class="f-row">
+          <div class="f-field"><label for="fYear">Year level</label>
+            <select id="fYear" name="year" required>
+              <option value="" disabled selected>Select year</option>
+              <option>Year 4–6 (GATE)</option><option>Year 7</option><option>Year 8</option><option>Year 9</option><option>Year 10</option><option>Year 11</option><option>Year 12</option><option>UCAT / Med entry</option>
+            </select>
+          </div>
+          <div class="f-field"><label for="fSubject">Subject(s)</label><input id="fSubject" name="subject" type="text" placeholder="e.g. Methods, Chemistry" /></div>
+        </div>
+        <div class="f-field"><label for="fMsg">Anything we should know?</label><textarea id="fMsg" name="message" placeholder="Goals, current marks, preferred centre…"></textarea></div>
+        <button type="submit" class="btn btn-primary magnetic" data-cursor><span class="btn-fill"></span><span>Claim my free lesson</span><svg viewBox="0 0 16 16" fill="none"><path d="M1 8h13M9 3l5 5-5 5" stroke="currentColor" stroke-width="1.6"/></svg></button>
+      </form>
+      <div class="form-ok" id="formOk">
+        <div class="ok-flag">⛰️</div>
+        <h4>Flag planted!</h4>
+        <p>Thanks — we've got your details and will be in touch within the hour during opening times. Welcome to base camp.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="f-brand">
+        <a href="#top" class="logo" data-cursor>
+          <svg class="logo-peak" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M3 26L13 8l4 7 3-5 9 16H3z" stroke="#bcdcff" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M13 8l2.6 4.6L13 15l-2.8-2.4L13 8z" fill="#f0b35c"/>
+          </svg>
+          EVEREST<b>TUTORING</b>
+        </a>
+        <p>Perth's small-group tutoring centre for Years 4–12. Elevate your marks — reach your summit.</p>
+      </div>
+      <div>
+        <h5>Programs</h5>
+        <ul>
+          <li><a href="#programs">GATE Prep (Yrs 4–6)</a></li>
+          <li><a href="#programs">Years 7–10</a></li>
+          <li><a href="#programs">ATAR (Yrs 11–12)</a></li>
+          <li><a href="#programs">UCAT &amp; Interviews</a></li>
+          <li><a href="#programs">Holiday Masterclasses</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Centres</h5>
+        <ul>
+          <li><a href="#contact">Harrisdale</a></li>
+          <li><a href="#contact">Willetton</a></li>
+          <li><a href="#contact">Harrisdale SHS</a></li>
+          <li><a href="#contact">Perth Modern</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Connect</h5>
+        <ul>
+          <li><a href="https://www.instagram.com/everesttutoring" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="https://www.facebook.com/EverestTutoring" target="_blank" rel="noopener">Facebook</a></li>
+          <li><a href="https://www.tiktok.com/@harieverest" target="_blank" rel="noopener">TikTok</a></li>
+          <li><a href="mailto:info@everesttutoring.com.au">info@everesttutoring.com.au</a></li>
+          <li><a href="tel:0404604673">0404 604 673</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-mark" aria-hidden="true">EVEREST</div>
+  <div class="container footer-bottom">
+    <span>© 2026 Everest Tutoring · Perth, WA</span>
+    <span>8,848 m and climbing ⛰️</span>
+  </div>
+</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+(function(){
+"use strict";
+gsap.registerPlugin(ScrollTrigger);
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+if(reduced) document.documentElement.classList.add('reduced');
+
+/* ---------- smooth scroll ---------- */
+let lenis = null;
+if(!reduced && typeof Lenis !== 'undefined'){
+  lenis = new Lenis({ duration:1.15, smoothWheel:true });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(t => lenis.raf(t*1000));
+  gsap.ticker.lagSmoothing(0);
+}
+function scrollTo(target){
+  if(lenis) lenis.scrollTo(target, {offset:-70, duration:1.4});
+  else { const el = typeof target==='string' ? document.querySelector(target) : target; if(el) el.scrollIntoView({behavior:'smooth'}); }
+}
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click', e=>{
+    const id = a.getAttribute('href');
+    if(id.length>1 && document.querySelector(id)){ e.preventDefault(); closeMenu(); scrollTo(id); }
+  });
+});
+
+/* ---------- THREE.js particle mountain ---------- */
+const canvas = document.getElementById('peaks');
+let three = null;
+if(typeof THREE !== 'undefined' && canvas){
+  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:false, powerPreference:'high-performance'});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x06080d, 0.016);
+  const camera = new THREE.PerspectiveCamera(58, 1, 0.1, 200);
+  camera.position.set(0, 7.5, 30);
+
+  // pseudo-noise
+  function hash(x,z){ const s = Math.sin(x*127.1 + z*311.7)*43758.5453; return s - Math.floor(s); }
+  function noise(x,z){
+    const xi=Math.floor(x), zi=Math.floor(z), xf=x-xi, zf=z-zi;
+    const u=xf*xf*(3-2*xf), v=zf*zf*(3-2*zf);
+    return hash(xi,zi)*(1-u)*(1-v)+hash(xi+1,zi)*u*(1-v)+hash(xi,zi+1)*(1-u)*v+hash(xi+1,zi+1)*u*v;
+  }
+  function height(x,z){
+    let h = 0;
+    h += noise(x*0.045, z*0.045)*7.5;
+    h += noise(x*0.12, z*0.12)*2.6;
+    h += noise(x*0.35, z*0.35)*0.7;
+    // central massif
+    const d = Math.sqrt(x*x*0.55 + (z+18)*(z+18)*0.9);
+    h += Math.max(0, 15 - d*0.42);
+    return h - 4.5;
+  }
+
+  const COLS = 170, ROWS = 90, SX = 0.72, SZ = 0.78;
+  const count = COLS*ROWS;
+  const positions = new Float32Array(count*3);
+  const colors = new Float32Array(count*3);
+  const base = new Float32Array(count); // base heights
+  const cDeep = new THREE.Color(0x274a78), cMid = new THREE.Color(0x7fb8ff), cSnow = new THREE.Color(0xeaf4ff), cGold = new THREE.Color(0xf0b35c);
+  let i3 = 0, idx = 0;
+  let maxH = -Infinity;
+  for(let r=0;r<ROWS;r++){
+    for(let c=0;c<COLS;c++){
+      const x = (c - COLS/2)*SX;
+      const z = -r*SZ + 6;
+      const h = height(x, z);
+      positions[i3]=x; positions[i3+1]=h; positions[i3+2]=z;
+      base[idx]=h;
+      if(h>maxH) maxH=h;
+      i3+=3; idx++;
+    }
+  }
+  i3 = 0; idx = 0;
+  const col = new THREE.Color();
+  for(let r=0;r<ROWS;r++){
+    for(let c=0;c<COLS;c++){
+      const h = base[idx];
+      const t = Math.max(0, Math.min(1, (h+3)/(maxH+3)));
+      if(t > 0.82){ col.copy(cSnow); if(Math.abs(t-0.86)<0.012) col.copy(cGold); }
+      else if(t > 0.45) col.copy(cMid).lerp(cSnow,(t-0.45)/0.37);
+      else col.copy(cDeep).lerp(cMid, t/0.45);
+      colors[i3]=col.r; colors[i3+1]=col.g; colors[i3+2]=col.b;
+      i3+=3; idx++;
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+  geo.setAttribute('color', new THREE.BufferAttribute(colors,3));
+  const mat = new THREE.PointsMaterial({size:0.085, vertexColors:true, transparent:true, opacity:0.9, depthWrite:false, sizeAttenuation:true});
+  const points = new THREE.Points(geo, mat);
+  const group = new THREE.Group();
+  group.add(points);
+  scene.add(group);
+
+  // drifting snow
+  const SNOW = 320;
+  const sPos = new Float32Array(SNOW*3);
+  for(let i=0;i<SNOW;i++){
+    sPos[i*3] = (Math.random()-0.5)*90;
+    sPos[i*3+1] = Math.random()*26;
+    sPos[i*3+2] = -Math.random()*60 + 10;
+  }
+  const sGeo = new THREE.BufferGeometry();
+  sGeo.setAttribute('position', new THREE.BufferAttribute(sPos,3));
+  const snow = new THREE.Points(sGeo, new THREE.PointsMaterial({size:0.14, color:0xbcdcff, transparent:true, opacity:0.55, depthWrite:false}));
+  scene.add(snow);
+
+  let mx = 0, my = 0, tmx = 0, tmy = 0;
+  window.addEventListener('pointermove', e=>{
+    tmx = (e.clientX/window.innerWidth - 0.5);
+    tmy = (e.clientY/window.innerHeight - 0.5);
+  }, {passive:true});
+
+  function resize(){
+    const w = canvas.clientWidth || window.innerWidth;
+    const h = canvas.clientHeight || window.innerHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const posAttr = geo.getAttribute('position');
+  const clock = new THREE.Clock();
+  let heroVisible = true;
+  new IntersectionObserver(en=>{ heroVisible = en[0].isIntersecting; }).observe(document.getElementById('hero'));
+
+  function tick(){
+    requestAnimationFrame(tick);
+    if(!heroVisible) return;
+    const t = clock.getElapsedTime();
+    if(!reduced){
+      // gentle shimmer on the terrain (update every other row for perf)
+      const arr = posAttr.array;
+      for(let r=0;r<ROWS;r+=2){
+        for(let c=0;c<COLS;c+=2){
+          const i = (r*COLS+c);
+          arr[i*3+1] = base[i] + Math.sin(t*0.8 + c*0.18 + r*0.3)*0.16;
+        }
+      }
+      posAttr.needsUpdate = true;
+      // snow drift
+      const sa = sGeo.getAttribute('position').array;
+      for(let i=0;i<SNOW;i++){
+        sa[i*3+1] -= 0.012 + (i%5)*0.003;
+        sa[i*3] += Math.sin(t*0.6 + i)*0.004;
+        if(sa[i*3+1] < -2) sa[i*3+1] = 26;
+      }
+      sGeo.getAttribute('position').needsUpdate = true;
+    }
+    mx += (tmx - mx)*0.04;
+    my += (tmy - my)*0.04;
+    group.rotation.y = mx*0.12;
+    group.rotation.x = my*0.04;
+    camera.position.y = 7.5 + my*-1.2;
+    camera.lookAt(0, 4.5, -18);
+    renderer.render(scene, camera);
+  }
+  tick();
+  three = true;
+}
+
+/* ---------- preloader + hero intro ---------- */
+const preAlt = document.getElementById('preAlt');
+const preBar = document.getElementById('preBar');
+const heroLines = document.querySelectorAll('.hero h1 .h-inner');
+const heroFades = document.querySelectorAll('[data-hero-fade]');
+gsap.set(heroFades, {opacity:0, y:30});
+
+function heroIntro(){
+  const tl = gsap.timeline();
+  tl.to(heroLines, {y:0, duration:1.25, ease:'power4.out', stagger:0.11})
+    .to(heroFades, {opacity:1, y:0, duration:0.9, ease:'power3.out', stagger:0.1}, '-=0.7');
+}
+function killPreloader(){
+  const pl = document.getElementById('preloader');
+  gsap.to(pl, {yPercent:-100, duration:0.9, ease:'power4.inOut', onComplete:()=> pl.remove()});
+  heroIntro();
+}
+if(reduced){
+  document.getElementById('preloader').remove();
+  gsap.set(heroLines,{y:0}); gsap.set(heroFades,{opacity:1,y:0});
+}else{
+  const counter = {v:0};
+  gsap.timeline({onComplete:killPreloader})
+    .to(preBar, {scaleX:1, duration:1.9, ease:'power2.inOut'}, 0)
+    .to(counter, {v:8848, duration:1.9, ease:'power2.inOut', onUpdate(){ preAlt.textContent = Math.round(counter.v).toLocaleString(); }}, 0)
+    .to({}, {duration:0.25});
+}
+
+/* ---------- nav state ---------- */
+const nav = document.getElementById('nav');
+ScrollTrigger.create({ start:80, onUpdate(self){ nav.classList.toggle('scrolled', self.scroll() > 80); }, onToggle(self){ nav.classList.toggle('scrolled', self.scroll() > 80); } });
+
+/* ---------- mobile menu ---------- */
+const burger = document.getElementById('burger');
+const menu = document.getElementById('mobileMenu');
+const mmLinks = menu.querySelectorAll('.mm-link, .mm-foot');
+gsap.set(menu, {clipPath:'inset(0 0 100% 0)', visibility:'hidden'});
+let menuOpen = false;
+function openMenu(){
+  menuOpen = true; burger.classList.add('open'); burger.setAttribute('aria-expanded','true'); menu.setAttribute('aria-hidden','false');
+  gsap.timeline()
+    .set(menu,{visibility:'visible'})
+    .to(menu,{clipPath:'inset(0 0 0% 0)', duration:0.65, ease:'power4.inOut'})
+    .fromTo(mmLinks,{y:46,opacity:0},{y:0,opacity:1,duration:0.6,ease:'power3.out',stagger:0.06},'-=0.25');
+  if(lenis) lenis.stop();
+}
+function closeMenu(){
+  if(!menuOpen) return;
+  menuOpen = false; burger.classList.remove('open'); burger.setAttribute('aria-expanded','false'); menu.setAttribute('aria-hidden','true');
+  gsap.to(menu,{clipPath:'inset(0 0 100% 0)', duration:0.5, ease:'power4.inOut', onComplete(){ gsap.set(menu,{visibility:'hidden'}); }});
+  if(lenis) lenis.start();
+}
+burger.addEventListener('click', ()=> menuOpen ? closeMenu() : openMenu());
+
+/* ---------- reveals ---------- */
+document.querySelectorAll('[data-reveal]').forEach(el=>{
+  gsap.to(el, {opacity:1, y:0, duration:1, ease:'power3.out',
+    scrollTrigger:{trigger:el, start:'top 88%', once:true}});
+});
+
+/* ---------- counters ---------- */
+document.querySelectorAll('[data-count]').forEach(el=>{
+  const target = parseFloat(el.dataset.count);
+  const dec = parseInt(el.dataset.decimals||'0',10);
+  ScrollTrigger.create({
+    trigger:el, start:'top 92%', once:true,
+    onEnter(){
+      const o = {v:0};
+      gsap.to(o, {v:target, duration:1.8, ease:'power3.out', onUpdate(){
+        el.textContent = dec ? o.v.toFixed(dec) : Math.round(o.v).toLocaleString();
+      }});
+    }
+  });
+});
+
+/* ---------- programs horizontal ascent ---------- */
+const mm = gsap.matchMedia();
+mm.add('(min-width: 861px)', ()=>{
+  const track = document.getElementById('programsTrack');
+  const pin = document.getElementById('programsPin');
+  const altEl = document.getElementById('altimeter');
+  const dist = () => track.scrollWidth - window.innerWidth + Math.max(window.innerWidth*0.04, (window.innerWidth-1240)/2);
+  const tween = gsap.to(track, {
+    x: () => -dist(),
+    ease:'none',
+    scrollTrigger:{
+      trigger:'#programs', start:'top top', end:() => '+=' + (dist()+200),
+      pin:pin, scrub:1, invalidateOnRefresh:true, anticipatePin:1,
+      onUpdate(self){
+        const alt = 1300 + (8848-1300)*self.progress;
+        altEl.textContent = Math.round(alt).toLocaleString() + ' m';
+      }
+    }
+  });
+  // card parallax shimmer while scrubbing
+  gsap.utils.toArray('.program-card').forEach((card,i)=>{
+    gsap.from(card, {opacity:0.4, scale:0.96, duration:0.5,
+      scrollTrigger:{trigger:card, containerAnimation:tween, start:'left 95%', once:true}});
+  });
+  return () => {};
+});
+
+/* ---------- marquee + testimonials: duplicate for seamless loop ---------- */
+function duplicate(el){ el.innerHTML += el.innerHTML; }
+duplicate(document.getElementById('marqueeTrack'));
+duplicate(document.getElementById('tRow1'));
+duplicate(document.getElementById('tRow2'));
+
+/* ---------- faq accordion ---------- */
+document.querySelectorAll('.faq-item').forEach(item=>{
+  const q = item.querySelector('.faq-q');
+  const a = item.querySelector('.faq-a');
+  q.addEventListener('click', ()=>{
+    const open = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(o=>{
+      if(o!==item){ o.classList.remove('open'); o.querySelector('.faq-q').setAttribute('aria-expanded','false');
+        gsap.to(o.querySelector('.faq-a'), {maxHeight:0, duration:0.45, ease:'power3.inOut'}); }
+    });
+    item.classList.toggle('open', !open);
+    q.setAttribute('aria-expanded', String(!open));
+    gsap.to(a, {maxHeight: open ? 0 : a.scrollHeight, duration:0.5, ease:'power3.inOut'});
+  });
+});
+
+/* ---------- magnetic buttons ---------- */
+if(!isTouch){
+  document.querySelectorAll('.magnetic').forEach(btn=>{
+    btn.addEventListener('mousemove', e=>{
+      const r = btn.getBoundingClientRect();
+      gsap.to(btn, {x:(e.clientX-r.left-r.width/2)*0.28, y:(e.clientY-r.top-r.height/2)*0.34, duration:0.4, ease:'power2.out'});
+    });
+    btn.addEventListener('mouseleave', ()=> gsap.to(btn, {x:0, y:0, duration:0.7, ease:'elastic.out(1,0.4)'}));
+  });
+}
+
+/* ---------- custom cursor ---------- */
+if(!isTouch){
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  const label = ring.querySelector('.cursor-label');
+  let cx=0, cy=0, rx=0, ry=0;
+  window.addEventListener('pointermove', e=>{ cx=e.clientX; cy=e.clientY; }, {passive:true});
+  gsap.ticker.add(()=>{
+    rx += (cx-rx)*0.16; ry += (cy-ry)*0.16;
+    dot.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%)`;
+    ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
+  });
+  document.querySelectorAll('a, button, [data-cursor]').forEach(el=>{
+    el.addEventListener('mouseenter', ()=>{
+      ring.classList.add('is-hover');
+      const l = el.dataset.cursorLabel;
+      if(l){ label.textContent = l; ring.classList.add('has-label'); }
+    });
+    el.addEventListener('mouseleave', ()=>{ ring.classList.remove('is-hover','has-label'); });
+  });
+}
+
+/* ---------- form ---------- */
+document.getElementById('trialForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('fName');
+  const phone = document.getElementById('fPhone');
+  const year = document.getElementById('fYear');
+  let valid = true;
+  [name, phone, year].forEach(f=>{
+    if(!f.value.trim()){ valid=false; gsap.fromTo(f, {x:-6},{x:0, duration:0.4, ease:'elastic.out(1,0.3)'}); f.style.borderColor='#e26d6d'; }
+    else f.style.borderColor='';
+  });
+  if(!valid) return;
+  const body = encodeURIComponent(
+    `Free trial request\n\nName: ${name.value}\nPhone: ${phone.value}\nYear: ${year.value}\nSubjects: ${document.getElementById('fSubject').value}\nNotes: ${document.getElementById('fMsg').value}`
+  );
+  // hand off to email — swap for a backend endpoint when available
+  window.location.href = `mailto:info@everesttutoring.com.au?subject=${encodeURIComponent('Free Trial Booking — ' + name.value)}&body=${body}`;
+  gsap.to(this, {opacity:0, y:-16, duration:0.4, onComplete:()=>{
+    this.style.display='none';
+    const ok = document.getElementById('formOk');
+    ok.style.display='block';
+    gsap.from(ok, {opacity:0, y:20, duration:0.6, ease:'power3.out'});
+  }});
+});
+
+/* ---------- footer mark parallax ---------- */
+gsap.from('.footer-mark', {yPercent:42, ease:'none',
+  scrollTrigger:{trigger:'.footer', start:'top bottom', end:'bottom bottom', scrub:1}});
+
+window.addEventListener('load', ()=> ScrollTrigger.refresh());
+})();
+</script>
+</body>
+</html>

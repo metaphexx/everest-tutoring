@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Everest Tutoring — The right guide changes the climb | Perth, Years 4 to 12</title>
+<meta name="description" content="Small-group tutoring in Perth for Years 4 to 12. Classes of 7 to 10, taught by tutors who scored 99+ in the same exams. Your first lesson is free." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   The Ascent — Everest Tutoring brand system
+============================================================ */
+:root{
+  --sky:#009dff; --sky-deep:#007acc; --cyan:#00FFFF;
+  --navy:#00203F; --navy-soft:#0a2d54;
+  --surface:#f0f7ff; --border:#e2eaf4; --slate:#64748b; --white:#ffffff;
+  --grad-cta:linear-gradient(135deg,#009dff,#007acc);
+  --grad-alpine:linear-gradient(160deg,#003F66 0%,#0a2d54 55%,#00203F 100%);
+  --font:'Gotham','Montserrat',system-ui,sans-serif;
+  --sh-ambient:0 1px 4px rgba(0,32,63,.06), 0 4px 16px rgba(0,32,63,.08);
+  --sh-lifted:0 24px 56px rgba(0,32,63,.14);
+  --sh-glow:0 8px 32px rgba(0,157,255,.4);
+  --sh-panel:0 2px 8px rgba(0,32,63,.08);
+  --r-sm:8px; --r-md:12px; --r-lg:20px; --r-xl:28px; --r-pill:9999px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:var(--font);font-weight:400;
+  font-size:16px;line-height:1.6;
+  color:var(--navy);background:var(--surface);
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-weight:700;line-height:1.2;letter-spacing:-.02em;color:var(--navy);}
+a{color:inherit;text-decoration:none;}
+ul{list-style:none;}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+svg{display:block;}
+::selection{background:#cce9ff;color:var(--navy);}
+:focus-visible{outline:2px solid var(--sky);outline-offset:2px;border-radius:6px;}
+.wrap{width:min(1120px,92vw);margin:0 auto;}
+
+/* ---------- buttons: the pill is the signature ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-weight:600;font-size:15.5px;padding:16px 32px;border-radius:var(--r-pill);transition:transform .2s ease,box-shadow .2s ease,background .2s ease;white-space:nowrap;}
+.btn-primary{background:var(--grad-cta);color:var(--white);}
+.btn-primary:hover{transform:scale(1.05);}
+.btn-primary.glow{box-shadow:var(--sh-glow);}
+.btn-ghost{background:transparent;color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.22);}
+.btn-ghost:hover{background:rgba(255,255,255,.1);}
+.btn-outline{background:transparent;color:var(--sky);border:1.5px solid var(--sky);padding:10px 20px;font-size:14.5px;}
+.btn-outline:hover{background:var(--surface);}
+.btn-compact{padding:10px 22px;font-size:14px;}
+.btn svg{width:16px;height:16px;flex:none;}
+
+/* ---------- chips ---------- */
+.chip{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:4px 12px;border-radius:var(--r-pill);}
+.chip-sky{background:#e0f2fe;color:#0369a1;}
+.chip-solid{background:var(--sky);color:var(--white);}
+
+/* ============================================================
+   nav: transparent over hero, white when scrolled
+============================================================ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:900;transition:background .25s ease,box-shadow .25s ease,border-color .25s ease;border-bottom:1px solid transparent;}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:74px;}
+.logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px;letter-spacing:-.02em;color:var(--white);transition:color .25s ease;}
+.logo svg{width:32px;height:32px;flex:none;}
+.logo .wm{color:var(--cyan);transition:color .25s ease;}
+.nav-links{display:flex;gap:4px;}
+.nav-links a{font-size:14.5px;font-weight:500;color:rgba(255,255,255,.8);padding:9px 15px;border-radius:var(--r-pill);transition:color .15s ease,background .15s ease;}
+.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.1);}
+.nav-right{display:flex;align-items:center;gap:14px;}
+.nav .btn-primary{padding:11px 24px;font-size:14px;}
+.nav.scrolled{background:rgba(255,255,255,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom-color:var(--border);}
+.nav.scrolled .logo{color:var(--navy);}
+.nav.scrolled .logo .wm{color:var(--sky);}
+.nav.scrolled .nav-links a{color:var(--slate);}
+.nav.scrolled .nav-links a:hover{color:var(--navy);background:var(--surface);}
+.burger{display:none;width:44px;height:44px;flex-direction:column;align-items:center;justify-content:center;gap:5px;border-radius:var(--r-md);}
+.burger span{width:21px;height:2px;background:var(--white);border-radius:2px;transition:transform .25s ease,opacity .2s ease,background .25s ease;}
+.nav.scrolled .burger span,.nav.menu-open .burger span{background:var(--navy);}
+.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.burger.open span:nth-child(2){opacity:0;}
+.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.drawer{display:none;position:fixed;top:74px;left:0;right:0;z-index:890;background:var(--white);border-bottom:1px solid var(--border);box-shadow:var(--sh-lifted);padding:10px 4vw 26px;}
+.drawer.open{display:block;}
+.drawer a{display:block;font-size:17px;font-weight:600;color:var(--navy);padding:15px 2px;border-bottom:1px solid var(--border);}
+.drawer a.btn{display:flex;width:100%;margin-top:18px;border-bottom:none;color:var(--white);}
+.nav.menu-open{background:var(--white);}
+.nav.menu-open .logo{color:var(--navy);}
+.nav.menu-open .logo .wm{color:var(--sky);}
+
+/* ============================================================
+   hero: the ascent
+============================================================ */
+.hero{position:relative;background:var(--grad-alpine);color:var(--white);overflow:hidden;padding:170px 0 0;}
+.hero-sky{position:absolute;inset:0;pointer-events:none;}
+.hero-copy{position:relative;z-index:3;max-width:640px;padding-bottom:300px;}
+.hero-badge{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);border-radius:var(--r-pill);padding:8px 18px;font-size:13.5px;font-weight:500;color:rgba(255,255,255,.9);margin-bottom:30px;}
+.hero-badge .stars{color:#ffd166;letter-spacing:2px;font-size:12px;}
+.hero h1{font-size:clamp(3rem,7vw,4.5rem);line-height:1.05;letter-spacing:-.025em;font-weight:700;color:var(--white);}
+.hero h1 .lift{color:var(--cyan);}
+.hero-sub{font-size:18px;line-height:1.7;color:rgba(255,255,255,.78);max-width:520px;margin:26px 0 36px;}
+.hero-sub strong{color:var(--white);font-weight:600;}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+.hero-note{font-size:13.5px;color:rgba(255,255,255,.55);margin-top:18px;}
+.hero-scene{position:absolute;left:0;right:0;bottom:0;z-index:1;pointer-events:none;}
+.hero-scene svg{width:100%;height:auto;}
+
+/* ---------- proof line ---------- */
+.proof{background:var(--white);border-bottom:1px solid var(--border);}
+.proof-inner{display:flex;align-items:center;justify-content:center;gap:14px;padding:26px 0;flex-wrap:wrap;text-align:center;}
+.proof .stars{color:#f59e0b;letter-spacing:3px;font-size:15px;}
+.proof p{font-size:15.5px;color:var(--slate);}
+.proof p strong{color:var(--navy);font-weight:700;}
+
+/* ============================================================
+   sections
+============================================================ */
+.sec{padding:clamp(76px,10vh,128px) 0;}
+.sec-head{max-width:660px;margin-bottom:clamp(40px,6vh,64px);}
+.sec-head h2{font-size:clamp(2rem,5vw,3rem);letter-spacing:-.02em;}
+.sec-head p{font-size:17px;color:var(--slate);margin-top:14px;max-width:560px;}
+
+/* ---------- programs: the route (ledger, not cards) ---------- */
+.route-list{border-top:1px solid var(--border);}
+.route{display:grid;grid-template-columns:150px 1.1fr 1.6fr auto;gap:28px;align-items:center;padding:30px 22px;border-bottom:1px solid var(--border);border-radius:var(--r-md);transition:background .2s ease;position:relative;}
+.route:hover{background:var(--white);}
+.route .yrs{font-weight:800;font-size:15px;letter-spacing:-.01em;color:var(--sky);}
+.route .yrs small{display:block;font-weight:500;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--slate);margin-top:2px;}
+.route h3{font-size:1.25rem;font-weight:700;letter-spacing:-.015em;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.route p{font-size:14.5px;color:var(--slate);line-height:1.6;max-width:46ch;}
+.route .go{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:14px;color:var(--sky);white-space:nowrap;}
+.route .go svg{width:15px;height:15px;transition:transform .2s ease;}
+.route:hover .go svg{transform:translateX(4px);}
+.route .go small{font-weight:500;color:var(--slate);font-size:13px;}
+.route.flagship{background:var(--white);border:1px solid var(--border);box-shadow:var(--sh-ambient);margin:14px 0;}
+.route.flagship:hover{box-shadow:var(--sh-lifted);}
+
+/* ---------- how it works: the path ---------- */
+.path-wrap{background:var(--white);border-block:1px solid var(--border);}
+.path-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(40px,6vw,90px);align-items:start;}
+.path-grid .sec-head{margin-bottom:28px;}
+.path-side{position:sticky;top:110px;}
+.path{position:relative;padding-left:34px;}
+.path::before{content:"";position:absolute;left:11px;top:14px;bottom:46px;width:2px;background:linear-gradient(180deg,var(--sky),var(--border));border-radius:2px;}
+.path-step{position:relative;padding:0 0 44px 26px;}
+.path-step:last-child{padding-bottom:0;}
+.path-step::before{content:"";position:absolute;left:-30px;top:4px;width:22px;height:22px;border-radius:var(--r-pill);background:var(--white);border:2px solid var(--sky);box-shadow:0 0 0 4px var(--surface);}
+.path-step.first::before{background:var(--sky);box-shadow:0 0 0 4px #d4ecff;}
+.path-step h3{font-size:1.3rem;letter-spacing:-.015em;display:flex;align-items:baseline;gap:12px;}
+.path-step h3 .free{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#15803d;background:#dcfce7;padding:3px 11px;border-radius:var(--r-pill);}
+.path-step p{font-size:15px;color:var(--slate);margin-top:8px;max-width:52ch;}
+
+/* ============================================================
+   keynote: numbers first (navy)
+============================================================ */
+.keynote{background:var(--navy);color:var(--white);position:relative;overflow:hidden;}
+.keynote::after{content:"";position:absolute;right:-180px;top:-180px;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(0,157,255,.16),transparent 65%);pointer-events:none;}
+.key-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(44px,6vw,88px);align-items:center;position:relative;z-index:1;}
+.keynote h2{color:var(--white);font-size:clamp(2rem,4.6vw,2.9rem);line-height:1.18;letter-spacing:-.02em;}
+.keynote h2 .cy{color:var(--cyan);}
+.keynote .key-body{font-size:16.5px;line-height:1.75;color:rgba(255,255,255,.72);margin-top:22px;max-width:54ch;}
+.keynote .key-body strong{color:var(--white);font-weight:600;}
+.key-facts{margin-top:30px;border-top:1px solid rgba(255,255,255,.12);}
+.key-facts li{display:flex;justify-content:space-between;gap:20px;align-items:baseline;padding:14px 2px;border-bottom:1px solid rgba(255,255,255,.12);font-size:15px;color:rgba(255,255,255,.72);}
+.key-facts li b{color:var(--white);font-weight:700;font-size:16px;white-space:nowrap;}
+.key-quote{background:var(--white);color:var(--navy);border-radius:var(--r-lg);box-shadow:var(--sh-lifted);padding:38px 38px 32px;}
+.key-quote .stars{color:#f59e0b;letter-spacing:3px;font-size:14px;margin-bottom:16px;}
+.kq-slide blockquote{font-size:17.5px;line-height:1.65;font-weight:500;color:var(--navy);}
+.kq-slide .who{display:flex;align-items:center;gap:13px;margin-top:24px;}
+.kq-slide .who i{width:40px;height:40px;border-radius:var(--r-pill);background:#e0f2fe;color:#0369a1;font-style:normal;font-weight:700;display:grid;place-items:center;font-size:15px;flex:none;}
+.kq-slide .who div{font-size:13.5px;color:var(--slate);line-height:1.4;}
+.kq-slide .who b{display:block;color:var(--navy);font-size:14.5px;}
+.kq-dots{display:flex;gap:8px;margin-top:28px;}
+.kq-dots button{width:28px;height:5px;border-radius:var(--r-pill);background:var(--border);transition:background .2s ease;}
+.kq-dots button.on{background:var(--sky);}
+
+/* ============================================================
+   tutors: the guides (profile rows, not a card grid)
+============================================================ */
+.guide-rows{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--border);}
+.guide{display:grid;grid-template-columns:auto 240px 1fr;gap:30px;align-items:center;padding:30px 22px;border-bottom:1px solid var(--border);border-radius:var(--r-md);transition:background .2s ease;}
+.guide:hover{background:var(--white);}
+.guide .mono{width:74px;height:74px;border-radius:var(--r-pill);background:var(--grad-cta);color:var(--white);font-weight:800;font-size:29px;display:grid;place-items:center;flex:none;}
+.guide h3{font-size:1.35rem;letter-spacing:-.015em;}
+.guide .uni{font-size:13.5px;color:var(--slate);margin-top:3px;}
+.guide .atar{display:inline-flex;margin-top:10px;font-size:12px;font-weight:700;letter-spacing:.05em;color:#0369a1;background:#e0f2fe;padding:4px 12px;border-radius:var(--r-pill);}
+.guide p{font-size:15px;color:var(--slate);max-width:58ch;}
+
+/* ============================================================
+   pricing: cards earn their keep here
+============================================================ */
+.pricing{background:var(--white);border-block:1px solid var(--border);}
+.pricing .sec-head{max-width:none;display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;}
+.pricing .sec-head p{margin-top:10px;}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch;}
+.plan{background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);padding:32px;display:flex;flex-direction:column;box-shadow:var(--sh-ambient);transition:transform .22s ease,box-shadow .22s ease;position:relative;}
+.plan:hover{transform:translateY(-4px);box-shadow:var(--sh-lifted);}
+.plan.featured{border:2px solid var(--sky);box-shadow:var(--sh-glow);}
+.plan .flag{position:absolute;top:-13px;left:28px;background:var(--grad-cta);color:var(--white);font-size:11.5px;font-weight:700;letter-spacing:.04em;padding:6px 15px;border-radius:var(--r-pill);}
+.plan h3{font-size:1.05rem;font-weight:600;color:var(--slate);}
+.plan .amount{display:flex;align-items:baseline;gap:7px;margin:14px 0 2px;}
+.plan .amount b{font-size:2.8rem;font-weight:800;letter-spacing:-.025em;color:var(--navy);line-height:1;}
+.plan .amount span{font-size:14px;color:var(--slate);}
+.plan .save{font-size:13.5px;color:var(--slate);margin-bottom:24px;}
+.plan .save b{color:#15803d;font-weight:600;}
+.plan ul{display:flex;flex-direction:column;gap:11px;margin-bottom:30px;}
+.plan ul li{display:flex;gap:11px;font-size:14.5px;color:var(--navy);align-items:flex-start;}
+.plan ul li svg{width:17px;height:17px;color:var(--sky);flex:none;margin-top:2px;}
+.plan .btn{margin-top:auto;width:100%;}
+.promise{display:flex;align-items:center;justify-content:center;gap:13px;margin-top:44px;text-align:center;flex-wrap:wrap;}
+.promise svg{width:21px;height:21px;color:var(--sky);flex:none;}
+.promise p{font-size:15.5px;color:var(--slate);max-width:62ch;}
+.promise p strong{color:var(--navy);font-weight:600;}
+
+/* ============================================================
+   faq
+============================================================ */
+.faq-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0 28px;align-items:start;}
+.faq-item{background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);margin-bottom:16px;overflow:hidden;box-shadow:var(--sh-ambient);transition:box-shadow .22s ease;}
+.faq-item.open{box-shadow:var(--sh-lifted);}
+.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:18px;text-align:left;padding:21px 24px;font-size:16px;font-weight:600;color:var(--navy);min-height:44px;}
+.faq-q .fi{width:30px;height:30px;border-radius:var(--r-pill);background:var(--surface);display:grid;place-items:center;flex:none;transition:transform .25s ease,background .2s ease;}
+.faq-q .fi svg{width:13px;height:13px;color:var(--sky);}
+.faq-item.open .fi{transform:rotate(45deg);background:var(--sky);}
+.faq-item.open .fi svg{color:var(--white);}
+.faq-a{max-height:0;overflow:hidden;}
+.faq-a p{padding:0 24px 22px;font-size:14.5px;color:var(--slate);}
+
+/* ============================================================
+   book: final ask
+============================================================ */
+.book{background:var(--grad-alpine);color:var(--white);position:relative;overflow:hidden;}
+.book .ridge{position:absolute;left:0;right:0;bottom:0;opacity:.5;pointer-events:none;}
+.book-grid{display:grid;grid-template-columns:1fr 460px;gap:clamp(44px,6vw,88px);align-items:center;position:relative;z-index:1;}
+.book h2{color:var(--white);font-size:clamp(2rem,4.8vw,3rem);letter-spacing:-.02em;line-height:1.12;}
+.book .book-sub{font-size:17px;color:rgba(255,255,255,.75);margin:20px 0 30px;max-width:46ch;}
+.book .call{font-size:15px;color:rgba(255,255,255,.65);}
+.book .call a{color:var(--white);font-weight:700;text-decoration:underline;text-underline-offset:4px;}
+.bform{background:var(--white);border-radius:var(--r-xl);box-shadow:var(--sh-lifted);padding:36px 34px;color:var(--navy);}
+.bform h3{font-size:1.3rem;letter-spacing:-.015em;}
+.bform .bf-sub{font-size:13.5px;color:var(--slate);margin:5px 0 24px;}
+.bf-field{margin-bottom:16px;}
+.bf-field label{display:block;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--slate);margin-bottom:7px;}
+.bf-field input,.bf-field select{width:100%;background:var(--white);border:1px solid var(--border);border-radius:var(--r-md);padding:13px 16px;font:inherit;font-size:15px;color:var(--navy);min-height:48px;transition:border-color .2s ease;appearance:none;}
+.bf-field input:focus,.bf-field select:focus{outline:2px solid var(--sky);outline-offset:2px;border-radius:6px;}
+.bf-field input::placeholder{color:#9aa8bd;}
+.bf-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.bform .btn{width:100%;margin-top:8px;}
+.bf-note{text-align:center;font-size:12.5px;color:var(--slate);margin-top:14px;}
+.bf-done{display:none;text-align:center;padding:34px 8px;}
+.bf-done .tick{width:62px;height:62px;border-radius:var(--r-pill);background:#dcfce7;color:#15803d;display:grid;place-items:center;margin:0 auto 18px;}
+.bf-done .tick svg{width:28px;height:28px;}
+.bf-done h4{font-size:1.25rem;margin-bottom:8px;}
+.bf-done p{font-size:14px;color:var(--slate);}
+
+/* ============================================================
+   footer
+============================================================ */
+.footer{background:var(--navy);color:rgba(255,255,255,.6);padding:60px 0 0;}
+.f-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1.2fr;gap:44px;padding-bottom:50px;}
+.footer .logo{font-size:17px;}
+.footer .logo .wm{color:var(--cyan);}
+.f-grid>div>p{font-size:14px;max-width:280px;margin-top:16px;line-height:1.7;}
+.footer h5{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--white);margin-bottom:18px;}
+.footer ul li{margin-bottom:11px;}
+.footer ul a{font-size:14px;transition:color .15s ease;}
+.footer ul a:hover{color:var(--white);}
+.footer address{font-style:normal;font-size:13.5px;line-height:1.7;}
+.footer address b{color:var(--white);font-weight:600;display:block;margin-top:10px;}
+.f-bottom{border-top:1px solid rgba(255,255,255,.1);padding:22px 0;display:flex;justify-content:space-between;gap:14px;font-size:13px;flex-wrap:wrap;}
+.f-bottom a:hover{color:var(--white);}
+
+/* ---------- reveal ---------- */
+[data-rise]{opacity:0;transform:translateY(26px);}
+html.reduced [data-rise]{opacity:1;transform:none;}
+
+/* ============================================================
+   responsive
+============================================================ */
+@media(max-width:1000px){
+  .route{grid-template-columns:110px 1fr;gap:8px 22px;}
+  .route p{grid-column:2;max-width:none;}
+  .route .go{grid-column:2;justify-self:start;}
+  .path-grid{grid-template-columns:1fr;}
+  .path-side{position:static;}
+  .key-grid{grid-template-columns:1fr;}
+  .guide{grid-template-columns:auto 1fr;}
+  .guide p{grid-column:1/-1;}
+  .plans{grid-template-columns:1fr;max-width:520px;margin:0 auto;}
+  .plan.featured{order:-1;}
+  .faq-grid{grid-template-columns:1fr;}
+  .book-grid{grid-template-columns:1fr;}
+  .f-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:760px){
+  .nav-links,.nav .btn-primary{display:none;}
+  .burger{display:flex;}
+  .hero{padding-top:130px;}
+  .hero-copy{padding-bottom:220px;}
+  .hero h1{font-size:clamp(2.4rem,11vw,3rem);}
+  .route{padding:24px 12px;}
+  .guide{padding:24px 12px;gap:16px 18px;}
+  .bf-2{grid-template-columns:1fr;}
+  .pricing .sec-head{display:block;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms!important;animation:none!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="#top" aria-label="Everest Tutoring home">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <polygon points="3,26 13,7 19,17.5 22.5,12 29,26" fill="#009dff"/>
+        <polygon points="13,7 16.4,12.8 13,15.6 9.8,12.6" fill="#ffffff"/>
+      </svg>
+      everest<span class="wm">tutoring</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#route">Programs</a>
+      <a href="#how">How it works</a>
+      <a href="#guides">Tutors</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-right">
+      <a class="btn btn-primary" href="#book">Book a free lesson</a>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<div class="drawer" id="drawer">
+  <a href="#route">Programs</a>
+  <a href="#how">How it works</a>
+  <a href="#guides">Tutors</a>
+  <a href="#pricing">Pricing</a>
+  <a href="#faq">FAQ</a>
+  <a class="btn btn-primary" href="#book">Book a free lesson</a>
+</div>
+
+<main id="top">
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="hero-sky" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero-copy">
+      <div class="hero-badge" data-hero><span class="stars" aria-hidden="true">★★★★★</span> Rated 4.9 out of 5 by Perth parents</div>
+      <h1 data-hero>The right guide changes the <span class="lift">climb</span>.</h1>
+      <p class="hero-sub" data-hero>Everest is Perth's small-group tutoring centre for <strong>Years 4 to 12</strong>. Classes of 7 to 10 students, taught by tutors who scored <strong>99+ ATARs</strong> in the same exams your child is sitting.</p>
+      <div class="hero-ctas" data-hero>
+        <a class="btn btn-primary glow" href="#book">Book a free lesson
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#route">See programs and pricing</a>
+      </div>
+      <p class="hero-note" data-hero>No card, no lock-in. Your first lesson costs nothing.</p>
+    </div>
+  </div>
+  <div class="hero-scene" aria-hidden="true">
+    <svg viewBox="0 0 1440 360" preserveAspectRatio="xMidYMax slice">
+      <defs>
+        <linearGradient id="r1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#0e3f70"/><stop offset="1" stop-color="#0a2d54"/>
+        </linearGradient>
+        <linearGradient id="r2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#0a2d54"/><stop offset="1" stop-color="#062141"/>
+        </linearGradient>
+        <linearGradient id="r3" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#03203f"/><stop offset="1" stop-color="#00203F"/>
+        </linearGradient>
+      </defs>
+      <g id="ridgeBack">
+        <path d="M0 250 L150 160 L260 215 L420 95 L560 195 L720 60 L880 180 L1040 110 L1200 200 L1330 150 L1440 195 L1440 360 L0 360 Z" fill="url(#r1)" opacity=".55"/>
+        <path d="M414 99 L420 95 L432 104 L424 110 Z" fill="#7fd4ff" opacity=".5"/>
+        <path d="M714 64 L720 60 L734 71 L724 78 Z" fill="#bfeaff" opacity=".75"/>
+      </g>
+      <g id="ridgeMid">
+        <path d="M0 290 L120 230 L300 280 L470 170 L640 265 L820 150 L980 250 L1160 185 L1320 260 L1440 220 L1440 360 L0 360 Z" fill="url(#r2)" opacity=".85"/>
+        <path d="M464 175 L470 170 L484 180 L474 187 Z" fill="#9fdcff" opacity=".55"/>
+      </g>
+      <circle id="beacon" cx="820" cy="143" r="3.5" fill="#00FFFF"/>
+      <circle id="beaconRing" cx="820" cy="143" r="8" fill="none" stroke="#00FFFF" stroke-width="1" opacity=".5"/>
+      <g id="ridgeFront">
+        <path d="M0 330 L160 285 L340 325 L540 245 L760 320 L960 235 L1180 315 L1360 275 L1440 300 L1440 360 L0 360 Z" fill="url(#r3)"/>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- ================= PROOF ================= -->
+<div class="proof">
+  <div class="wrap proof-inner">
+    <span class="stars" aria-hidden="true">★★★★★</span>
+    <p><strong>4.9 out of 5</strong> on Google. Founded by three tutors who scored <strong>99.85, 99.85 and 99.30</strong>, now studying Medicine and Engineering at UWA.</p>
+  </div>
+</div>
+
+<!-- ================= PROGRAMS: THE ROUTE ================= -->
+<section class="sec" id="route">
+  <div class="wrap">
+    <div class="sec-head" data-rise>
+      <h2>One centre, every stage of the climb</h2>
+      <p>From a Year 4 GATE exam to a med school interview, the same team guides the whole route. Pick the stage your child is at.</p>
+    </div>
+    <div class="route-list">
+      <a class="route" href="#book" data-rise>
+        <div class="yrs">Years 4–6<small>Base camp</small></div>
+        <h3>GATE preparation</h3>
+        <p>Abstract reasoning, comprehension, writing and quantitative skills for WA's selective school exams. Includes a free mock exam.</p>
+        <span class="go"><small>free mock exam</small> Book <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="route" href="#book" data-rise>
+        <div class="yrs">Years 7–10<small>The approach</small></div>
+        <h3>English, Maths &amp; Science</h3>
+        <p>Rock-solid fundamentals and exam technique before the stakes get high, plus NAPLAN masterclasses for Years 7 and 9.</p>
+        <span class="go"><small>from $350 a term</small> Book <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="route flagship" href="#book" data-rise>
+        <div class="yrs">Years 11–12<small>Summit push</small></div>
+        <h3>ATAR courses <span class="chip chip-solid">Most enrolled</span></h3>
+        <p>Methods, Specialist, Chemistry, Physics, Human Biology, English and Economics. Notes and worksheets written by 99+ scorers, with WACE revision before exams.</p>
+        <span class="go"><small>from $35 a class</small> Book <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="route" href="#book" data-rise>
+        <div class="yrs">Year 12+<small>Beyond</small></div>
+        <h3>UCAT &amp; med interviews</h3>
+        <p>UCAT strategy, MMI coaching and CASPer prep from current UWA Doctor of Medicine students who aced them recently.</p>
+        <span class="go"><small>taught by med students</small> Book <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="route" href="#book" data-rise>
+        <div class="yrs">Holidays<small>Acclimatise</small></div>
+        <h3>Masterclasses</h3>
+        <p>Intensive ATAR, NAPLAN and WACE revision blocks that turn school breaks into a head start on next term.</p>
+        <span class="go"><small>from $15 an hour</small> Book <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW IT WORKS ================= -->
+<section class="path-wrap sec" id="how">
+  <div class="wrap path-grid">
+    <div class="path-side">
+      <div class="sec-head" data-rise>
+        <h2>Three steps. The first is free.</h2>
+        <p>No assessments to pay for and no sales calls. You start with a real class and decide from there.</p>
+      </div>
+      <a class="btn btn-primary" href="#book" data-rise>Start with step one</a>
+    </div>
+    <div class="path">
+      <div class="path-step first" data-rise>
+        <h3>Book a free lesson <span class="free">Free</span></h3>
+        <p>Pick a year level and subject. Your child sits a full class at Harrisdale or Willetton, materials included, and you see how they respond.</p>
+      </div>
+      <div class="path-step" data-rise>
+        <h3>Get a personal path</h3>
+        <p>We map where the gaps are and set a term plan: the topics to fix first, the exam skills to build, and the goal to aim at.</p>
+      </div>
+      <div class="path-step" data-rise>
+        <h3>Climb week by week</h3>
+        <p>Weekly classes, custom worksheets, and a tutor on call between lessons through Discord and Instagram. Progress you can see in marks, not promises.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= KEYNOTE ================= -->
+<section class="keynote sec" id="results">
+  <div class="wrap key-grid">
+    <div>
+      <h2 data-rise>Three founders. Three <span class="cy">99+</span> ATARs. One way to judge us: the scoreboard.</h2>
+      <p class="key-body" data-rise>We tell families to judge tutoring the way examiners judge students, by the numbers. Ours are recent, public, and earned in the same WACE exams your child will sit.</p>
+      <ul class="key-facts" data-rise>
+        <li>Highest ATAR on the team <b>99.85</b></li>
+        <li>Students in every class <b>7 to 10, capped</b></li>
+        <li>Typical reply to a stuck student <b>under an hour</b></li>
+        <li>Support between lessons <b>24/7 Discord &amp; Instagram</b></li>
+      </ul>
+    </div>
+    <div class="key-quote" data-rise>
+      <div class="stars" aria-hidden="true">★★★★★</div>
+      <div id="kqSlides">
+        <div class="kq-slide">
+          <blockquote>The tutors are experienced, helpful and professional. I'd recommend them to any parent wanting to help their children through the difficult times that Year 11 and 12 can be.</blockquote>
+          <div class="who"><i>Z</i><div><b>Zakwan Plewright</b>Google review</div></div>
+        </div>
+        <div class="kq-slide" hidden>
+          <blockquote>Very professional, very friendly and most importantly very smart. Everest Tutoring is a good investment, guaranteed.</blockquote>
+          <div class="who"><i>M</i><div><b>Mitul Rajaram</b>Parent · Google review</div></div>
+        </div>
+        <div class="kq-slide" hidden>
+          <blockquote>Have had the amazing opportunity to work with these brilliant tutors. Very competent and dedicated people, definitely would recommend their service.</blockquote>
+          <div class="who"><i>T</i><div><b>Tony Liyang</b>Google review</div></div>
+        </div>
+        <div class="kq-slide" hidden>
+          <blockquote>I'm so glad and happy with your tutoring services! You've got a fantastic team of tutors.</blockquote>
+          <div class="who"><i>A</i><div><b>Arun S</b>Parent · Google review</div></div>
+        </div>
+      </div>
+      <div class="kq-dots" id="kqDots" aria-label="More reviews"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TUTORS ================= -->
+<section class="sec" id="guides">
+  <div class="wrap">
+    <div class="sec-head" data-rise>
+      <h2>Taught by people who sat the same exams</h2>
+      <p>Not career lecturers reading from a binder. Recent top scorers who remember exactly what the climb feels like.</p>
+    </div>
+    <div class="guide-rows">
+      <div class="guide" data-rise>
+        <div class="mono">H</div>
+        <div>
+          <h3>Hari</h3>
+          <div class="uni">Doctor of Medicine, UWA · Co-founder</div>
+          <span class="atar">99.85 ATAR</span>
+        </div>
+        <p>Teaches senior Maths and Sciences and leads the UCAT and interview program, drawing on his own medicine entry the year before.</p>
+      </div>
+      <div class="guide" data-rise>
+        <div class="mono">A</div>
+        <div>
+          <h3>Abilaash</h3>
+          <div class="uni">Doctor of Medicine, UWA · Co-founder</div>
+          <span class="atar">99.85 ATAR</span>
+        </div>
+        <p>Four years of teaching. Known for making Methods and Chemistry click for students who had decided they "weren't maths people".</p>
+      </div>
+      <div class="guide" data-rise>
+        <div class="mono">A</div>
+        <div>
+          <h3>Aaron</h3>
+          <div class="uni">Biomedical Engineering, UWA</div>
+          <span class="atar">99.30 ATAR</span>
+        </div>
+        <p>Physics and senior Maths specialist. Breaks intimidating problems into steps so clean that students ask why school never showed them.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRICING ================= -->
+<section class="pricing sec" id="pricing">
+  <div class="wrap">
+    <div class="sec-head" data-rise>
+      <div>
+        <h2>Pay by the term, not the hour</h2>
+        <p>Year 9 shown as the example: a full 10-week term with all materials and between-lesson support included.</p>
+      </div>
+      <a class="btn btn-outline" href="#book">Ask about your year level</a>
+    </div>
+    <div class="plans">
+      <div class="plan" data-rise>
+        <h3>1 subject</h3>
+        <div class="amount"><b>$350</b><span>/term</span></div>
+        <p class="save">10 weeks, about $35 a class</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>One class each week, max 10 students</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>All notes and worksheets included</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Tutor on call between lessons</li>
+        </ul>
+        <a class="btn btn-outline" href="#book">Try a class free</a>
+      </div>
+      <div class="plan featured" data-rise>
+        <span class="flag">Most families choose this</span>
+        <h3>2 subjects</h3>
+        <div class="amount"><b>$600</b><span>/term</span></div>
+        <p class="save">10 weeks, <b>saves $100</b> against one-by-one</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Two classes each week</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>All notes and worksheets included</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Tutor on call between lessons</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Priority seats in holiday masterclasses</li>
+        </ul>
+        <a class="btn btn-primary" href="#book">Try a class free</a>
+      </div>
+      <div class="plan" data-rise>
+        <h3>3 subjects</h3>
+        <div class="amount"><b>$800</b><span>/term</span></div>
+        <p class="save">10 weeks, <b>saves $250</b> against one-by-one</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Three classes each week</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>All notes and worksheets included</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Tutor on call between lessons</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Priority seats in holiday masterclasses</li>
+        </ul>
+        <a class="btn btn-outline" href="#book">Try a class free</a>
+      </div>
+    </div>
+    <div class="promise" data-rise>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+      <p><strong>The free-lesson promise.</strong> Your first lesson costs nothing and proves everything. If it's not the right fit, you owe us nothing and we'll point you somewhere that is. Year 6 terms start near $300; Year 12 packages run to $1,250.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="sec" id="faq">
+  <div class="wrap">
+    <div class="sec-head" data-rise>
+      <h2>What parents ask us first</h2>
+    </div>
+    <div class="faq-grid">
+      <div>
+        <div class="faq-item" data-rise>
+          <button class="faq-q" aria-expanded="false">How big are the classes?<span class="fi"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></button>
+          <div class="faq-a"><p>Seven to ten students, capped hard. Small enough that the tutor knows where every student is at, big enough that your child learns from classmates' questions too.</p></div>
+        </div>
+        <div class="faq-item" data-rise>
+          <button class="faq-q" aria-expanded="false">Is the first lesson really free?<span class="fi"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></button>
+          <div class="faq-a"><p>Yes, completely. A full class with materials included, no card details and no obligation. You decide afterwards whether to continue.</p></div>
+        </div>
+        <div class="faq-item" data-rise>
+          <button class="faq-q" aria-expanded="false">What happens between lessons?<span class="fi"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></button>
+          <div class="faq-a"><p>Every student joins our private Discord and Instagram channels. Stuck on a question at 9pm before a test? Send it through; replies typically land within the hour.</p></div>
+        </div>
+      </div>
+      <div>
+        <div class="faq-item" data-rise>
+          <button class="faq-q" aria-expanded="false">Where are classes held?<span class="fi"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></button>
+          <div class="faq-a"><p>Two centres: Harrisdale (3/723 Ranford Road) and Willetton (Unit 3b/113 High Road), plus school partnerships at Harrisdale SHS and Perth Modern. Weekday evenings and weekends.</p></div>
+        </div>
+        <div class="faq-item" data-rise>
+          <button class="faq-q" aria-expanded="false">Do you provide materials?<span class="fi"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></button>
+          <div class="faq-a"><p>Everything is included: topic worksheets, thorough notes and practice questions written by our own 99+ ATAR tutors, not photocopied from a textbook.</p></div>
+        </div>
+        <div class="faq-item" data-rise>
+          <button class="faq-q" aria-expanded="false">Can you help with medicine entry?<span class="fi"><svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></button>
+          <div class="faq-a"><p>That's our specialty. Our founders are current UWA Doctor of Medicine students, and we run UCAT prep, MMI interview coaching and CASPer crash courses from recent firsthand experience.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BOOK ================= -->
+<section class="book sec" id="book">
+  <div class="wrap book-grid">
+    <div>
+      <h2 data-rise>Ready when you are. The first lesson is on us.</h2>
+      <p class="book-sub" data-rise>Tell us the year level and subjects, and we'll save a seat in a class this week at Harrisdale or Willetton.</p>
+      <p class="call" data-rise>Prefer to talk? Call <a href="tel:0404604673">0404 604 673</a></p>
+    </div>
+    <div class="bform" data-rise>
+      <form id="bookForm" novalidate>
+        <h3>Save a free seat</h3>
+        <p class="bf-sub">We reply within the hour during opening times.</p>
+        <div class="bf-2">
+          <div class="bf-field"><label for="bName">Your name</label><input id="bName" type="text" required placeholder="Alex Chen" autocomplete="name" /></div>
+          <div class="bf-field"><label for="bPhone">Phone</label><input id="bPhone" type="tel" required placeholder="04xx xxx xxx" autocomplete="tel" /></div>
+        </div>
+        <div class="bf-2">
+          <div class="bf-field"><label for="bYear">Year level</label>
+            <select id="bYear" required>
+              <option value="" disabled selected>Choose a year</option>
+              <option>Year 4 to 6 (GATE)</option><option>Year 7</option><option>Year 8</option><option>Year 9</option><option>Year 10</option><option>Year 11</option><option>Year 12</option><option>UCAT / med entry</option>
+            </select>
+          </div>
+          <div class="bf-field"><label for="bSubject">Subjects</label><input id="bSubject" type="text" placeholder="e.g. Methods, Chemistry" /></div>
+        </div>
+        <button type="submit" class="btn btn-primary glow">Save my free seat</button>
+        <p class="bf-note">No card. No lock-in. Cancel anytime.</p>
+      </form>
+      <div class="bf-done" id="bfDone">
+        <div class="tick">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <h4>Seat saved</h4>
+        <p>Thanks. We'll text you within the hour during opening times to lock in the class.</p>
+      </div>
+    </div>
+  </div>
+  <svg class="ridge" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 90 L0 64 L220 28 L420 58 L640 14 L880 52 L1100 22 L1300 56 L1440 30 L1440 90 Z" fill="#00203F"/>
+  </svg>
+</section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="f-grid">
+      <div>
+        <a class="logo" href="#top">
+          <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <polygon points="3,26 13,7 19,17.5 22.5,12 29,26" fill="#009dff"/>
+            <polygon points="13,7 16.4,12.8 13,15.6 9.8,12.6" fill="#ffffff"/>
+          </svg>
+          everest<span class="wm">tutoring</span>
+        </a>
+        <p>Small-group tutoring in Perth for Years 4 to 12. Every student climbs with a guide.</p>
+      </div>
+      <div>
+        <h5>Programs</h5>
+        <ul>
+          <li><a href="#route">GATE preparation</a></li>
+          <li><a href="#route">Years 7 to 10</a></li>
+          <li><a href="#route">ATAR courses</a></li>
+          <li><a href="#route">UCAT and interviews</a></li>
+          <li><a href="#route">Holiday masterclasses</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#guides">Our tutors</a></li>
+          <li><a href="#results">Results</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="mailto:info@everesttutoring.com.au">Careers</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Visit us</h5>
+        <address>
+          <b>Harrisdale</b>3/723 Ranford Road, Harrisdale WA 6112
+          <b>Willetton</b>Unit 3b/113 High Rd, Willetton WA 6155
+          <b>Hours</b>Mon to Thu 5pm to 8:30pm · Sat 9:30am to 6pm · Sun 9am to 7:30pm
+        </address>
+      </div>
+    </div>
+    <div class="f-bottom">
+      <span>© 2026 Everest Tutoring · Perth, WA</span>
+      <span><a href="tel:0404604673">0404 604 673</a> · <a href="mailto:info@everesttutoring.com.au">info@everesttutoring.com.au</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+"use strict";
+gsap.registerPlugin(ScrollTrigger);
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(reduced) document.documentElement.classList.add('reduced');
+
+/* nav state */
+const nav = document.getElementById('nav');
+function navState(){ nav.classList.toggle('scrolled', window.scrollY > 24); }
+window.addEventListener('scroll', navState, {passive:true});
+navState();
+
+/* drawer */
+const burger = document.getElementById('burger');
+const drawer = document.getElementById('drawer');
+burger.addEventListener('click', ()=>{
+  const open = drawer.classList.toggle('open');
+  burger.classList.toggle('open', open);
+  nav.classList.toggle('menu-open', open);
+  burger.setAttribute('aria-expanded', String(open));
+});
+drawer.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=>{
+  drawer.classList.remove('open'); burger.classList.remove('open');
+  nav.classList.remove('menu-open'); burger.setAttribute('aria-expanded','false');
+}));
+
+/* anchors */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click', e=>{
+    const t = document.querySelector(a.getAttribute('href'));
+    if(t){ e.preventDefault(); t.scrollIntoView({behavior: reduced ? 'auto' : 'smooth'}); }
+  });
+});
+
+/* hero orchestration: one well-paced load */
+if(!reduced){
+  gsap.set('[data-hero]', {opacity:0, y:26});
+  gsap.to('[data-hero]', {opacity:1, y:0, duration:.8, ease:'expo.out', stagger:.09, delay:.1});
+  gsap.from('#ridgeBack', {yPercent:36, duration:1.4, ease:'expo.out', delay:.15});
+  gsap.from('#ridgeMid', {yPercent:26, duration:1.4, ease:'expo.out', delay:.25});
+  gsap.from('#ridgeFront', {yPercent:18, duration:1.4, ease:'expo.out', delay:.35});
+  gsap.to('#beaconRing', {scale:2.2, opacity:0, transformOrigin:'center', duration:2.4, ease:'power1.out', repeat:-1, repeatDelay:.6});
+  /* slow parallax drift on scroll, transform only */
+  gsap.to('#ridgeBack', {yPercent:-8, ease:'none', scrollTrigger:{trigger:'.hero', start:'top top', end:'bottom top', scrub:1}});
+}
+
+/* quiet scroll reveals */
+document.querySelectorAll('[data-rise]').forEach(el=>{
+  gsap.to(el, {opacity:1, y:0, duration:.7, ease:'expo.out',
+    scrollTrigger:{trigger:el, start:'top 88%', once:true}});
+});
+
+/* review rotator */
+const slides = Array.from(document.querySelectorAll('.kq-slide'));
+const dotsWrap = document.getElementById('kqDots');
+let cur = 0, timer = null;
+slides.forEach((s,i)=>{
+  const b = document.createElement('button');
+  b.setAttribute('aria-label', 'Review ' + (i+1));
+  if(i===0) b.classList.add('on');
+  b.addEventListener('click', ()=>{ go(i); restart(); });
+  dotsWrap.appendChild(b);
+});
+const dots = Array.from(dotsWrap.children);
+function go(i){
+  if(i===cur) return;
+  const out = slides[cur], inn = slides[i];
+  dots[cur].classList.remove('on'); dots[i].classList.add('on');
+  cur = i;
+  if(reduced){ out.hidden = true; inn.hidden = false; return; }
+  gsap.to(out, {opacity:0, y:-8, duration:.18, ease:'power1.in', onComplete(){
+    out.hidden = true; inn.hidden = false;
+    gsap.fromTo(inn, {opacity:0, y:12}, {opacity:1, y:0, duration:.3, ease:'expo.out'});
+  }});
+}
+function restart(){ clearInterval(timer); if(!reduced) timer = setInterval(()=> go((cur+1)%slides.length), 5200); }
+restart();
+
+/* faq */
+document.querySelectorAll('.faq-item').forEach(item=>{
+  const q = item.querySelector('.faq-q');
+  const a = item.querySelector('.faq-a');
+  q.addEventListener('click', ()=>{
+    const open = item.classList.contains('open');
+    item.classList.toggle('open', !open);
+    q.setAttribute('aria-expanded', String(!open));
+    gsap.to(a, {maxHeight: open ? 0 : a.scrollHeight, duration:.28, ease:'power2.inOut'});
+  });
+});
+
+/* booking form */
+document.getElementById('bookForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('bName');
+  const phone = document.getElementById('bPhone');
+  const year = document.getElementById('bYear');
+  let ok = true;
+  [name, phone, year].forEach(f=>{
+    if(!f.value.trim()){ ok = false; f.style.borderColor = '#ef4444'; }
+    else f.style.borderColor = '';
+  });
+  if(!ok) return;
+  const body = encodeURIComponent(
+    'Free lesson booking\n\nName: ' + name.value + '\nPhone: ' + phone.value +
+    '\nYear: ' + year.value + '\nSubjects: ' + document.getElementById('bSubject').value
+  );
+  window.location.href = 'mailto:info@everesttutoring.com.au?subject=' +
+    encodeURIComponent('Free lesson: ' + name.value) + '&body=' + body;
+  this.style.display = 'none';
+  const done = document.getElementById('bfDone');
+  done.style.display = 'block';
+  if(!reduced) gsap.from(done, {opacity:0, y:14, duration:.5, ease:'expo.out'});
+});
+})();
+</script>
+</body>
+</html>

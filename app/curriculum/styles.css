@@ -1,0 +1,830 @@
+/* Curriculum page styles */
+
+/* ─── Hero (light, two-column) ─────────────────────────── */
+.curr-hero {
+  background: transparent;
+  color: var(--navy-500, #00203F);
+  padding: clamp(3rem, 6vw, 5rem) 1.5rem clamp(3rem, 5vw, 4.5rem);
+  position: relative;
+  overflow: hidden;
+}
+
+.curr-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 0.92fr;
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: center;
+}
+
+.curr-hero .eyebrow {
+  display: inline-block;
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brand-700, #005E99);
+  margin-bottom: 1rem;
+  padding: 0.3rem 0.85rem;
+  background: #fff;
+  border: 1px solid var(--border-subtle, #DDE4EC);
+  border-radius: 999px;
+}
+
+.curr-hero h1 {
+  font-family: var(--font-display, 'Montserrat', sans-serif);
+  font-size: clamp(2rem, 4.4vw, 3.1rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  max-width: 18ch;
+  margin: 0 0 1.25rem;
+  color: var(--navy-500, #00203F);
+}
+/* Matches the homepage hero accent: brand-blue text with a half-height
+   highlight. Scoped to the curriculum hero so it stays blue on its light
+   background at every breakpoint (the global .hero-title-accent flips to white
+   on mobile for the video hero). */
+.curr-hero h1 .curr-accent {
+  color: var(--brand-600, #007ECC);
+  background: linear-gradient(180deg, transparent 64%, rgba(0, 157, 255, 0.18) 64%);
+}
+
+.curr-hero .subhead {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  max-width: 52ch;
+  margin: 0 0 2rem;
+  color: var(--ink-600, #404B5C);
+}
+
+.curr-hero .hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--brand-500, #009DFF);
+  color: #fff;
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.875rem 2rem;
+  border-radius: 0.625rem;
+  text-decoration: none;
+  box-shadow: 0 8px 22px -8px rgba(0,157,255,.55);
+  transition: background 0.2s, transform 0.15s;
+}
+
+.curr-hero .hero-cta:hover {
+  background: var(--brand-600, #007ECC);
+  transform: translateY(-1px);
+}
+
+/* Flow diagram in hero */
+.hero-flow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.hero-flow-node {
+  background: #fff;
+  border: 1px solid var(--border-subtle, #DDE4EC);
+  box-shadow: var(--shadow-xs);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.1rem;
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--navy-500, #00203F);
+  white-space: nowrap;
+}
+
+.hero-flow-arrow {
+  color: var(--brand-500, #009DFF);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Mobile: centre the CTA and stack the hero flow vertically (each pill centred,
+   arrows pointing down) so it reads cleanly on a narrow screen. */
+@media (max-width: 600px) {
+  .curr-hero .hero-cta {
+    display: flex;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-flow {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+  }
+  .hero-flow-node { width: fit-content; }
+  .hero-flow-arrow { transform: rotate(90deg); }
+}
+
+/* HSHS outline screenshot card */
+.curr-hero-media { display: flex; justify-content: center; }
+.curr-outline-card {
+  width: 100%;
+  max-width: 440px;
+  background: #fff;
+  border: 1px solid var(--border-subtle, #DDE4EC);
+  border-radius: 18px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.curr-outline-head img { border-radius: 50%; object-fit: cover; }
+.curr-outline-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid var(--border-subtle, #DDE4EC);
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--navy-500, #00203F);
+  background: var(--ink-50, #F7F9FB);
+}
+.curr-outline-img {
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 1.5rem;
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.85rem;
+  color: var(--ink-400, #8C99A8);
+  background:
+    repeating-linear-gradient(45deg, rgba(0,157,255,.04) 0 12px, transparent 12px 24px),
+    var(--ink-50, #F7F9FB);
+}
+
+@media (max-width: 860px) {
+  .curr-hero-grid { grid-template-columns: 1fr; }
+  .curr-outline-card { max-width: 520px; }
+}
+
+/* ─── Sections ──────────────────────────────────────────── */
+.curr-section {
+  padding: 5rem 1.5rem;
+}
+
+.curr-section.bg-light {
+  background: transparent;
+}
+
+.curr-section.bg-white {
+  background: transparent;
+}
+
+.curr-section.bg-navy {
+  background: var(--navy-500, #00203F);
+  color: #fff;
+}
+
+.curr-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.curr-section-eyebrow {
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brand-500, #009DFF);
+  margin-bottom: 0.75rem;
+}
+
+.curr-section h2 {
+  font-family: var(--font-display, 'Montserrat', sans-serif);
+  font-size: clamp(1.625rem, 3.5vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  color: var(--navy-500, #00203F);
+}
+
+.curr-section.bg-navy h2 {
+  color: #fff;
+}
+
+.curr-section p.lead {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--ink-600, #404B5C);
+  max-width: 680px;
+}
+
+/* ─── 3-col how-it-works ────────────────────────────────── */
+.curr-how-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.curr-how-card {
+  background: #fff;
+  border: 1px solid var(--ink-200, #DDE4EC);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.curr-how-card .icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 0.75rem;
+  background: var(--brand-50, #E6F6FF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.125rem;
+  color: var(--brand-500, #009DFF);
+}
+
+.curr-how-card h3 {
+  font-family: var(--font-display, 'Montserrat', sans-serif);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--navy-500, #00203F);
+  margin-bottom: 0.5rem;
+}
+
+.curr-how-card p {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--ink-600, #404B5C);
+}
+
+/* ─── Subject cards ─────────────────────────────────────── */
+.curr-subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.curr-subject-card {
+  background: #fff;
+  border-radius: 1.25rem;
+  border: 1px solid var(--ink-200, #DDE4EC);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.curr-subject-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.subject-card-header {
+  padding: 1.5rem 1.5rem 1.25rem;
+  border-bottom: 1px solid var(--ink-100, #EEF2F6);
+}
+
+.subject-card-header.maths { border-top: 4px solid var(--brand-500, #009DFF); }
+.subject-card-header.english { border-top: 4px solid var(--warn-500, #F5A623); }
+.subject-card-header.science { border-top: 4px solid var(--success-500, #22A05B); }
+
+.subject-tag {
+  display: inline-block;
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  margin-bottom: 0.75rem;
+}
+
+.maths .subject-tag { background: var(--brand-50, #E6F6FF); color: var(--brand-600, #007ECC); }
+.english .subject-tag { background: var(--warn-50, #FFF4E0); color: var(--warn-700, #A86A0C); }
+.science .subject-tag { background: var(--success-50, #E7F8EF); color: var(--success-700, #14733F); }
+
+.subject-card-header h3 {
+  font-family: var(--font-display, 'Montserrat', sans-serif);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--navy-500, #00203F);
+  margin-bottom: 0.25rem;
+}
+
+.subject-card-header .years {
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.8125rem;
+  color: var(--ink-500, #5E6B7C);
+}
+
+.subject-card-body {
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.content-areas {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.content-areas li {
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.875rem;
+  color: var(--ink-700, #2A3342);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.content-areas li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.maths .content-areas li::before { background: var(--brand-500, #009DFF); }
+.english .content-areas li::before { background: var(--warn-500, #F5A623); }
+.science .content-areas li::before { background: var(--success-500, #22A05B); }
+
+.subject-card-body p {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--ink-600, #404B5C);
+  margin-bottom: 1.25rem;
+}
+
+.img-placeholder {
+  background: var(--ink-100, #EEF2F6);
+  border: 2px dashed var(--ink-300, #C3CDD8);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--ink-500, #5E6B7C);
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.8125rem;
+  font-style: italic;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Student journey (vertical timeline, animates on scroll) ──────────
+   A connector line runs down the centre and fills as you scroll the section
+   into view; the numbered circles light up in sequence (see JourneyFlow.tsx,
+   mirroring the homepage "How it works" effect). */
+.journey-flow {
+  max-width: 340px;
+  margin: 2.75rem auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+/* Short connector that lives in the GAP between a label and the next number, so
+   the line points down to the next step without ever crossing the label text. */
+.journey-connector {
+  position: relative;
+  width: 3px;
+  height: 30px;
+  margin: 12px 0;
+  background-image: linear-gradient(var(--brand-200, #99D7FF) 50%, transparent 50%);
+  background-size: 3px 10px;
+  border-radius: 3px;
+}
+.journey-connector-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--brand-500, #009DFF);
+  border-radius: 3px;
+  box-shadow: 0 0 8px rgba(0, 157, 255, 0.5);
+}
+.journey-step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.6rem;
+}
+.step-num {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--brand-200, #99D7FF);
+  color: var(--brand-600, #007ECC);
+  font-family: var(--font-display, 'Montserrat', sans-serif);
+  font-size: 1.125rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.9), 0 6px 16px -8px rgba(0, 157, 255, 0.4);
+  transition: background 0.35s var(--ease-standard, ease), border-color 0.35s var(--ease-standard, ease),
+    color 0.35s var(--ease-standard, ease), transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.journey-step.active .step-num {
+  background: var(--brand-500, #009DFF);
+  border-color: var(--brand-500, #009DFF);
+  color: #fff;
+  transform: scale(1.06);
+}
+.journey-step h4 {
+  font-family: var(--font-display, 'Montserrat', sans-serif);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--navy-500, #00203F);
+}
+
+/* ─── Class size section ────────────────────────────────── */
+.class-size-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  margin-top: 0;
+}
+
+@media (max-width: 720px) {
+  .class-size-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+.student-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.student-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--brand-100, #CCEDFF);
+  border: 2px solid var(--brand-300, #66C9FF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand-700, #005E99);
+}
+
+/* ─── 2x2 image grid ────────────────────────────────────── */
+.img-grid-2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+@media (max-width: 560px) {
+  .img-grid-2x2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.img-grid-2x2 .img-placeholder {
+  min-height: 160px;
+  font-size: 0.8125rem;
+}
+
+/* ─── CTA section ───────────────────────────────────────── */
+.curr-cta-section {
+  background: linear-gradient(135deg, #00203F 0%, #003366 100%);
+  padding: 5rem 1.5rem;
+  text-align: center;
+  color: #fff;
+}
+
+.curr-cta-section h2 {
+  font-family: var(--font-display, 'Montserrat', sans-serif);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+
+.curr-cta-section p {
+  font-family: var(--font-body, 'Montserrat', sans-serif);
+  font-size: 1.0625rem;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 2rem;
+}
+
+.curr-cta-section .cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--brand-500, #009DFF);
+  color: #fff;
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.875rem 2rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.curr-cta-section .cta-btn:hover {
+  background: var(--brand-600, #007ECC);
+  transform: translateY(-1px);
+}
+
+.curr-cta-section .tc-link {
+  display: block;
+  margin-top: 1.25rem;
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.8125rem;
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+}
+
+.curr-cta-section .tc-link:hover {
+  color: rgba(255,255,255,0.8);
+}
+
+/* ─── Back link ─────────────────────────────────────────── */
+.back-link-bar {
+  background: var(--ink-50, #F7F9FB);
+  padding: 0.875rem 1.5rem;
+  border-bottom: 1px solid var(--ink-200, #DDE4EC);
+}
+
+.back-link-bar a {
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.875rem;
+  color: var(--brand-600, #007ECC);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-weight: 500;
+}
+
+.back-link-bar a:hover {
+  color: var(--navy-500, #00203F);
+}
+
+.text-center { text-align: center; }
+
+/* ─── Document flow (outline → booklet → prac test) ────── */
+.doc-flow {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 14px;
+  align-items: stretch;
+  margin-top: 2.5rem;
+}
+.doc-flow-item {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--border-subtle, #DDE4EC);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: var(--shadow-md);
+}
+.doc-frame-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--navy-500, #00203F);
+  margin-bottom: 12px;
+}
+.doc-frame-ic {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+.doc-frame {
+  height: 380px;
+  overflow-y: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle, #DDE4EC);
+  background: var(--ink-100, #EEF2F6);
+  padding: 14px;
+  scroll-behavior: smooth;
+}
+.doc-frame:focus-visible { outline: 2px solid var(--brand-500, #009DFF); outline-offset: 2px; }
+.doc-frame::-webkit-scrollbar { width: 9px; }
+.doc-frame::-webkit-scrollbar-thumb { background: var(--ink-300, #C3CDD8); border-radius: 99px; border: 2px solid var(--ink-100, #EEF2F6); }
+.doc-iframe { width: 100%; height: 100%; border: 0; border-radius: 8px; background: #fff; }
+.doc-page {
+  background: #fff;
+  border: 1px solid var(--border-subtle, #DDE4EC);
+  border-radius: 6px;
+  aspect-ratio: 1 / 1.414;
+  margin-bottom: 14px;
+  padding: 18px;
+  box-shadow: var(--shadow-xs);
+}
+.doc-page:last-child { margin-bottom: 0; }
+.doc-page-title {
+  font-family: var(--font-display, 'Montserrat', sans-serif);
+  font-weight: 800;
+  font-size: 0.78rem;
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+}
+.doc-line {
+  height: 7px;
+  background: var(--ink-100, #EEF2F6);
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+.doc-frame-tag {
+  align-self: flex-start;
+  margin-top: 12px;
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-500, #5E6B7C);
+}
+.doc-flow-arrow {
+  display: grid;
+  place-items: center;
+  color: var(--brand-500, #009DFF);
+}
+.doc-flow-note {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.8rem;
+  color: var(--ink-400, #8C99A8);
+}
+@media (max-width: 880px) {
+  .doc-flow { grid-template-columns: 1fr; }
+  .doc-flow-arrow { transform: rotate(90deg); padding: 6px 0; }
+}
+
+/* ─── Glassy cards (frosted, matches the portal .glass-card look) ──────── */
+.curr-outline-card,
+.doc-flow-item,
+.curr-how-card,
+.curr-subject-card {
+  /* Frosted pane with a top-down sheen + crisp inner edge, like the homepage
+     image cards. */
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.52) 100%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  backdrop-filter: blur(22px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 26px 52px -28px rgba(15, 42, 79, 0.55),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+.hero-flow-node {
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  backdrop-filter: blur(10px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 20px -16px rgba(15, 42, 79, 0.5);
+}
+/* Translucent inner panels so the glass reads through */
+.curr-outline-head { background: rgba(255, 255, 255, 0.42); border-bottom-color: rgba(255, 255, 255, 0.55); }
+.subject-card-header { border-bottom-color: rgba(15, 42, 79, 0.08); }
+.img-placeholder { background: rgba(255, 255, 255, 0.4); border-color: rgba(15, 42, 79, 0.18); }
+
+/* Real course-outline screenshot in the hero card */
+.curr-outline-img { padding: 0; background: #fff; }
+.curr-outline-img img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+
+/* PDF first-page previews in the outline -> booklet -> prac flow */
+.doc-frame--img { padding: 0; overflow-y: auto; background: #fff; }
+.doc-frame--img img { width: 100%; display: block; }
+.doc-frame-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 12px; }
+.doc-frame-foot .doc-frame-tag { margin-top: 0; align-self: center; }
+.doc-frame-link {
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--brand-600, #007ECC);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+.doc-frame-link:hover { color: var(--navy-500, #00203F); }
+
+/* Real subject-card media image */
+.subject-img {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 22px -14px rgba(15, 42, 79, 0.55);
+}
+.subject-img img { width: 100%; display: block; }
+
+/* ─── Classroom diagram: tutor + whiteboard + 3 clusters of 4 students ─── */
+.classroom {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.5);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 18px 44px -28px rgba(15, 42, 79, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.7);
+}
+.classroom-board {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  border-radius: 0.6rem;
+  background: var(--navy-500, #00203F);
+  color: #fff;
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.classroom-tutor {
+  align-self: center;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  background: var(--brand-500, #009DFF);
+  color: #fff;
+  font-family: var(--font-ui, 'Inter', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px -8px rgba(0, 157, 255, 0.7);
+}
+.classroom-clusters { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.cluster {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.85rem;
+  border-radius: 0.75rem;
+  background: rgba(0, 157, 255, 0.07);
+  border: 1px dashed rgba(0, 157, 255, 0.3);
+}
+.student-dot {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--brand-100, #CCEDFF);
+  border: 2px solid var(--brand-300, #66C9FF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand-700, #005E99);
+}
+@media (max-width: 520px) { .classroom-clusters { grid-template-columns: 1fr; } }
+
+/* ─── Gallery images (See Everest in action) ─── */
+.gallery-img {
+  aspect-ratio: 4 / 3;
+  border-radius: 0.9rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 14px 36px -22px rgba(15, 42, 79, 0.55);
+  background: #fff;
+}
+.gallery-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* The dark "Ready to enrol" CTA sits flush against the footer on this page,
+   so no cream splash background peeks through the gap. */
+body:has(.curr-cta-section) footer.site-footer { margin-top: 0; }

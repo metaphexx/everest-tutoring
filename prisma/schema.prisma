@@ -1,0 +1,944 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id                    String         @id @default(cuid())
+  name                  String?
+  email                 String         @unique
+  emailVerified         DateTime?
+  image                 String?
+  phone                 String?
+  role                  String         @default("parent") // parent | tutor | admin
+  emailOptOut           Boolean        @default(false)
+  smsOptOut             Boolean        @default(false)
+  // Lifecycle: a family becomes `alumni` when they withdraw their last student;
+  // re-enrolling flips them back to `active` (handled in the Stripe webhook).
+  lifecycleStage        String         @default("active") // active | alumni
+  alumniSince           DateTime?
+  marketingOptOut       Boolean        @default(false) // win-back marketing consent (separate from transactional STOP)
+  // Account lock. A tutor caught poaching/sending malicious messages is auto-suspended
+  // (blocked from signing in) pending admin review.
+  suspended             Boolean        @default(false)
+  suspendedAt           DateTime?
+  suspendedReason       String?
+  // Saved card for off-session auto-enrolment charges (captured at checkout).
+  stripeCustomerId      String?
+  stripePaymentMethodId String?
+  accounts              Account[]
+  sessions              Session[]
+  students              Student[]      @relation("ParentChildren")
+  studentProfile        Student?       @relation("StudentAccount") // set when this User IS a student
+  bookings              Booking[]
+  taughtSubjects        Subject[]      @relation("TutorSubjects")
+  markedAttendance      Attendance[]   @relation("MarkedBy")
+  authoredNotes         LessonNote[]   @relation("NoteAuthor")
+  authoredReports       Report[]       @relation("ReportAuthor")
+  authoredStudentNotes  StudentNote[]  @relation("StudentNoteAuthor")
+  withdrawalRequests    WithdrawalRequest[]
+  notifications         Notification[]
+  conversationsAsParent Conversation[] @relation("ConvParent")
+  conversationsAsTutor  Conversation[] @relation("ConvTutor")
+  messagesSent          Message[]      @relation("MsgSender")
+  // Student Learning Hub authored content
+  authoredAnnouncements Announcement[]   @relation("AnnouncementAuthor")
+  uploadedResources     TutorResource[]  @relation("ResourceUploader")
+  uploadedFiles         FileAttachment[] @relation("FileUploader")
+  questionReplies       QuestionReply[]  @relation("ReplyAuthor")
+  createdAt             DateTime       @default(now())
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Student {
+  id             String          @id @default(cuid())
+  firstName      String
+  lastName       String
+  yearLevel      Int
+  parentId       String
+  parent         User            @relation("ParentChildren", fields: [parentId], references: [id])
+  status         String          @default("active") // active | withdrawn
+  withdrawnAt    DateTime?
+  exitReason     String?
+  deletedAt      DateTime?       // soft-delete: recoverable from the admin trash
+  // Student Learning Hub: the student's own login account (separate from the parent).
+  // Captured at enrolment; the account is activated when they first use the magic link.
+  email              String?
+  phone              String?
+  userId             String?    @unique
+  account            User?      @relation("StudentAccount", fields: [userId], references: [id])
+  invitedAt          DateTime?
+  accountActivatedAt DateTime?
+  enrollments    Enrollment[]
+  makeupBookings MakeupBooking[]
+  attendance     Attendance[]
+  reports        Report[]
+  notes          StudentNote[]
+  credits        StudentCredit[]
+  missedSessions MissedSession[]
+  conversations  Conversation[]
+  courseOutlines     StudentCourseOutline[]
+  schoolDocuments    SchoolDocument[]
+  assessments        StudentAssessment[]
+  questions          Question[]
+  questionReactions  QuestionReaction[]
+  createdAt      DateTime        @default(now())
+}
+
+model Term {
+  id         String    @id @default(cuid())
+  name       String
+  year       Int
+  termNumber Int
+  startDate  DateTime
+  endDate    DateTime
+  weeks      Int       @default(10) // billable class weeks (editable; default ~span, adjust for holidays)
+  isActive   Boolean   @default(false)
+  subjects   Subject[]
+  bookings   Booking[]
+  reports    Report[]
+  outlines   CourseOutline[]
+}
+
+model Subject {
+  id            String         @id @default(cuid())
+  name          String
+  yearLevel     Int
+  dayOfWeek     Int
+  startTime     String
+  endTime       String
+  capacity      Int            @default(12)
+  color         String         @default("#009dff")
+  termId        String
+  term          Term           @relation(fields: [termId], references: [id])
+  tutorId       String?
+  tutor         User?          @relation("TutorSubjects", fields: [tutorId], references: [id])
+  enrollments   Enrollment[]
+  attendance    Attendance[]
+  lessonNotes   LessonNote[]
+  reports       Report[]
+  conversations Conversation[]
+  waitlist      Waitlist[]
+  announcements Announcement[]
+  resources     TutorResource[]
+  questions     Question[]
+}
+
+model Enrollment {
+  id        String   @id @default(cuid())
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id])
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  bookingId String
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+}
+
+model Booking {
+  id               String       @id @default(cuid())
+  userId           String
+  user             User         @relation(fields: [userId], references: [id])
+  termId           String
+  term             Term         @relation(fields: [termId], references: [id])
+  enrollments      Enrollment[]
+  studentsCount    Int          @default(1)
+  subjectsPerWeek  Int
+  weeksRemaining   Int
+  totalAmountCents Int
+  stripeSessionId  String?      @unique
+  stripePaymentId  String?
+  paymentStatus    String       @default("pending")
+  confirmationCode String?      @unique
+  smsSent          Boolean      @default(false)
+  emailSent        Boolean      @default(false)
+  notes            String?
+  createdAt        DateTime     @default(now())
+  paidAt           DateTime?
+
+  // Auto-enrolment: roll this family into next term automatically (parent can opt out).
+  autoReenrol       Boolean      @default(true)
+  reenrolledToId    String? // id of the next-term booking created by the rollover
+
+  // Xero accounting sync (see lib/xero.ts). Null until the booking is invoiced.
+  xeroContactId     String?
+  xeroInvoiceId     String?
+  xeroInvoiceNumber String?
+  xeroStatus        String? // preview | invoiced | failed
+  xeroSyncedAt      DateTime?
+}
+
+model MakeupBooking {
+  id          String   @id @default(cuid())
+  studentId   String
+  student     Student  @relation(fields: [studentId], references: [id])
+  subjectName String
+  yearLevel   Int
+  makeupDate  DateTime
+  status      String   @default("pending")
+  notes       String?
+  createdAt   DateTime @default(now())
+}
+
+// One record per student per class session. classDate is the calendar date of
+// the weekly session the attendance applies to.
+model Attendance {
+  id         String   @id @default(cuid())
+  studentId  String
+  student    Student  @relation(fields: [studentId], references: [id])
+  subjectId  String
+  subject    Subject  @relation(fields: [subjectId], references: [id])
+  classDate  DateTime
+  status     String   @default("present") // present | late | absent | excused
+  note       String?
+  markedById String?
+  markedBy   User?    @relation("MarkedBy", fields: [markedById], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([studentId, subjectId, classDate])
+  @@index([subjectId, classDate])
+}
+
+// "What we covered today" + homework, one per class session, shown to parents.
+model LessonNote {
+  id        String   @id @default(cuid())
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  classDate DateTime
+  summary   String
+  homework  String?
+  authorId  String?
+  author    User?    @relation("NoteAuthor", fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([subjectId, classDate])
+}
+
+// End-of-term report: tutor authors, admin publishes, parent reads.
+model Report {
+  id            String   @id @default(cuid())
+  studentId     String
+  student       Student  @relation(fields: [studentId], references: [id])
+  subjectId     String?
+  subject       Subject? @relation(fields: [subjectId], references: [id])
+  termId        String
+  term          Term     @relation(fields: [termId], references: [id])
+  effort        String? // Excellent | Good | Satisfactory | Needs focus
+  attendancePct Int?
+  comment       String
+  published     Boolean  @default(false)
+  authorId      String?
+  author        User?    @relation("ReportAuthor", fields: [authorId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([studentId, termId])
+}
+
+// Audit + dedupe log for every email/SMS the platform sends.
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  channel   String // email | sms
+  type      String // confirmation | reminder | absence | report | broadcast
+  recipient String // email address or phone number
+  subject   String?
+  body      String
+  status    String   @default("sent") // sent | failed | skipped | preview
+  refKey    String?  @unique // dedupe key, e.g. reminder:<subjectId>:<yyyy-mm-dd>:<studentId>
+  error     String?
+  createdAt DateTime @default(now())
+
+  @@index([type, createdAt])
+}
+
+// A message thread. type 'tutor' = parent <-> their child's tutor (admin-monitored);
+// type 'support' = parent <-> Everest admin team.
+model Conversation {
+  id            String    @id @default(cuid())
+  type          String // tutor | support | student (student <-> their tutor, admin-monitored)
+  status        String    @default("open") // open | resolved
+  parentId      String
+  parent        User      @relation("ConvParent", fields: [parentId], references: [id])
+  tutorId       String?
+  tutor         User?     @relation("ConvTutor", fields: [tutorId], references: [id])
+  subjectId     String?
+  subject       Subject?  @relation(fields: [subjectId], references: [id])
+  studentId     String?
+  student       Student?  @relation(fields: [studentId], references: [id])
+  topic         String? // support: subject line
+  aiSummary     String? // rolling AI summary for admin oversight
+  aiTags        String? // support triage tags, comma-separated
+  priority      Boolean   @default(false) // admin-flagged complaint/escalation
+  flaggedCount  Int       @default(0)
+  lastMessageAt DateTime  @default(now())
+  messages      Message[]
+  createdAt     DateTime  @default(now())
+
+  @@index([type, lastMessageAt])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  senderId       String
+  sender         User         @relation("MsgSender", fields: [senderId], references: [id])
+  body           String
+  // AI moderation. Flags are advisory (surfaced to admin); a high-severity
+  // poaching/abuse message from a tutor is BLOCKED - kept for admin evidence but
+  // withheld from the parent (and the tutor is suspended).
+  flagged        Boolean      @default(false)
+  flagCategory   String? // poaching | abuse | safeguarding | principle | other
+  flagSeverity   String? // low | medium | high
+  flagReason     String?
+  blocked            Boolean   @default(false) // withheld from the recipient
+  reportedToParentAt DateTime? // admin chose to report a withheld message to the parent
+  attachments    FileAttachment[]
+  createdAt      DateTime     @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
+// ── HSHS partner two-way channel (school posts these; Everest consumes them) ──
+
+// Upcoming HSHS assessments the school shares so tutors can align lessons.
+model AssessmentDate {
+  id          String   @id @default(cuid())
+  yearLevel   Int
+  subject     String   // Maths | English | Science
+  title       String
+  date        DateTime
+  notes       String?
+  createdById String?
+  createdAt   DateTime @default(now())
+
+  @@index([date])
+}
+
+// A student the school thinks would benefit from tutoring -> a warm lead.
+model Referral {
+  id          String   @id @default(cuid())
+  studentName String
+  yearLevel   Int
+  subject     String?
+  reason      String
+  status      String   @default("new") // new | contacted | enrolled | declined
+  createdById String?
+  createdAt   DateTime @default(now())
+
+  // Parent contact, supplied by HSHS so Everest can reach out about booking.
+  parentName  String?
+  parentEmail String?
+  parentPhone String?
+
+  // Elliot-drafted outreach: drafted on referral, admin edits/approves, then sent.
+  outreachStatus  String? // drafted | sent
+  outreachSubject String?
+  outreachEmail   String?
+  outreachSms     String?
+  outreachSentAt  DateTime?
+  deletedAt       DateTime? // soft-delete: recoverable from the admin trash
+}
+
+// A notice from the school to Everest (room change, term dates, bell times…).
+model SchoolNotice {
+  id          String   @id @default(cuid())
+  title       String
+  body        String
+  category    String   @default("general") // room | timetable | term | general
+  createdById String?
+  createdAt   DateTime @default(now())
+}
+
+// A course outline HSHS uploads per year level + subject. The AI scans rawText
+// to extract assessment dates (-> AssessmentDate rows) and weekly topics
+// (stored as JSON in `topics`). See lib/outline.ts.
+model CourseOutline {
+  id           String    @id @default(cuid())
+  yearLevel    Int
+  subject      String // Maths | English | Science
+  termId       String?
+  term         Term?     @relation(fields: [termId], references: [id])
+  fileName     String
+  sourceUrl    String? // optional link to the original (e.g. Google Drive)
+  rawText      String? // extracted/pasted outline text the AI scans
+  status       String    @default("uploaded") // uploaded | scanned | failed
+  topics       String? // JSON: [{ week:number|null, topic:string, focus?:string }]
+  scanSummary  String?
+  uploadedById String?
+  createdAt    DateTime  @default(now())
+  scannedAt    DateTime?
+
+  @@index([yearLevel, subject])
+}
+
+// Waitlist for a class that's at capacity. Auto-offer when a seat frees.
+model Waitlist {
+  id          String   @id @default(cuid())
+  subjectId   String
+  subject     Subject  @relation(fields: [subjectId], references: [id])
+  parentId    String
+  parentName  String?
+  studentName String?
+  studentId   String? // set when the waitlist entry is for a known student
+  bookingId   String? // set when a *paid* booking overflowed a full class (priority seating)
+  status      String   @default("waiting") // waiting | offered | claimed | enrolled | declined | expired
+  offeredAt   DateTime? // when a seat was offered; offers expire if unclaimed
+  claimedAt   DateTime? // when the family started checkout (status 'claimed', pending payment)
+  claimToken  String?  @unique // one-click claim link token (cleared on claim/expiry)
+  createdAt   DateTime @default(now())
+
+  @@index([subjectId, status])
+}
+
+// A parent's request to withdraw a student. Retention-first: this is a contact
+// point, NOT a self-service unenrol. Admin discusses, then either retains the
+// family or processes the withdrawal (lib/withdrawal.ts).
+model WithdrawalRequest {
+  id          String    @id @default(cuid())
+  parentId    String
+  parent      User      @relation(fields: [parentId], references: [id])
+  parentName  String?
+  studentId   String? // the specific student, or null for the whole family
+  studentName String?
+  reason      String?
+  status      String    @default("requested") // requested | discussing | retained | processed
+  adminNote   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  resolvedAt  DateTime?
+
+  @@index([status, createdAt])
+}
+
+// Append-only audit trail: who did what, when, with a before/after snapshot so
+// accidental changes can be reverted. Most rows are written automatically by the
+// Prisma audit extension (lib/db.ts) for every create/update/delete an admin makes.
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  actorName  String?
+  actorRole  String? // admin | tutor | parent | student | system
+  action     String // e.g. "class.cancel", "Student.update", "credit.grant"
+  kind       String? // create | update | delete | action
+  entity     String? // Prisma model name, e.g. "Student"
+  entityId   String?
+  target     String? // human label of what was acted on
+  detail     String?
+  before     String? // JSON snapshot of scalar fields before the change
+  after      String? // JSON snapshot after the change
+  reverted   Boolean  @default(false)
+  revertedAt DateTime?
+  revertedById String?
+  // Tamper-evident chain: each row stores its own SHA-256 (hash) computed over the
+  // previous row's hash + this row's content. Any later edit or deletion to history
+  // breaks the chain, which verifyAuditChain() detects. See lib/audit-chain.ts.
+  hash       String?
+  prevHash   String?
+  // Request provenance, captured from request headers in requireUser.
+  ip         String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([entity, entityId])
+  @@index([actorId, createdAt])
+}
+
+// A substitute tutor covering a class session (tutor sick etc.).
+model Substitution {
+  id               String   @id @default(cuid())
+  subjectId        String
+  substituteTutorId String?
+  substituteName   String
+  dateLabel        String
+  reason           String?
+  createdById      String?
+  createdAt        DateTime @default(now())
+
+  @@index([subjectId, createdAt])
+}
+
+// A session a parent told us in advance their child would miss. They can book a
+// make-up into another class the same term; if they don't, it auto-converts to
+// account credit for next term. Only created by the PARENT's self-report - a
+// tutor marking a student absent does NOT create one.
+model MissedSession {
+  id              String    @id @default(cuid())
+  studentId       String
+  student         Student   @relation(fields: [studentId], references: [id])
+  parentId        String
+  termId          String
+  missedSubject   String
+  missedDateLabel String
+  note            String?
+  status          String    @default("open") // open | booked | credited | cancelled
+  makeupSubject   String?
+  makeupDateLabel String?
+  creditId        String?
+  createdAt       DateTime  @default(now())
+  resolvedAt      DateTime?
+
+  @@index([parentId, status])
+  @@index([termId, status])
+}
+
+// Account credit on a student (e.g. issued when they miss a session). Applied to
+// reduce future charges - re-enrolment + new bookings. `amountCents` is the
+// REMAINING value (decremented as it's consumed); status flips to `applied` at 0.
+model StudentCredit {
+  id            String    @id @default(cuid())
+  studentId     String
+  student       Student   @relation(fields: [studentId], references: [id])
+  parentId      String // family the credit belongs to (applied at family level)
+  amountCents   Int // remaining value
+  originalCents Int // original grant, for the ledger
+  reason        String
+  status        String    @default("active") // active | applied | void
+  createdById   String?
+  createdAt     DateTime  @default(now())
+  appliedAt     DateTime?
+  deletedAt     DateTime? // soft-delete: recoverable from the admin trash
+
+  @@index([parentId, status])
+}
+
+// Admin CRM notes / documentation on a student (visible only to staff).
+model StudentNote {
+  id         String   @id @default(cuid())
+  studentId  String
+  student    Student  @relation(fields: [studentId], references: [id])
+  authorId   String?
+  author     User?    @relation("StudentNoteAuthor", fields: [authorId], references: [id])
+  authorName String?
+  category   String   @default("general") // general | academic | behaviour | billing | retention | safeguarding
+  body       String
+  pinned     Boolean  @default(false)
+  deletedAt  DateTime? // soft-delete: recoverable from the admin trash
+  createdAt  DateTime @default(now())
+
+  @@index([studentId, createdAt])
+}
+
+// Safeguarding / behaviour / injury incident log (restricted, duty of care).
+model Incident {
+  id           String   @id @default(cuid())
+  studentName  String?
+  category     String // safeguarding | behaviour | injury | other
+  severity     String   @default("medium") // low | medium | high
+  details      String
+  actionTaken  String?
+  status       String   @default("open") // open | resolved
+  reportedById String?
+  createdAt    DateTime @default(now())
+
+  @@index([status, createdAt])
+}
+
+// A parent-raised request to change something (makeup / reschedule / cancel).
+// No refunds per T&Cs - cancellations are handled as credit/withdrawal, never a
+// money-back option. Parent submits; admin triages. Denormalized names so the
+// admin list needs no joins.
+model ServiceRequest {
+  id            String    @id @default(cuid())
+  parentId      String
+  parentName    String?
+  studentId     String?
+  studentName   String?
+  subjectName   String?
+  type          String // makeup | reschedule | cancel | other
+  details       String
+  preferredDate DateTime?
+  status        String    @default("open") // open | approved | declined | scheduled | resolved
+  adminNote     String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([status, createdAt])
+}
+
+// In-CRM alerts for the admin team, aggregated from every tab (referrals,
+// support messages, flagged chats, outline scans, payments…). See lib/admin-notify.ts.
+model AdminNotification {
+  id        String   @id @default(cuid())
+  type      String // referral | support | flag | outline | booking | payment | system
+  title     String
+  body      String?
+  href      String? // deep link into the CRM
+  read      Boolean  @default(false)
+  refKey    String?  @unique // dedupe key
+  createdAt DateTime @default(now())
+
+  @@index([read, createdAt])
+}
+
+// Abandoned-cart capture. We save the in-progress checkout the moment a family
+// reaches payment (before they pay) so a recovery cron can chase them by email +
+// SMS with a resume link. Keyed by email: one live cart per family (latest wins).
+// Marked `completed` by the Stripe webhook when payment lands.
+model PendingBooking {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  phone           String?
+  parentFirstName String?
+  parentLastName  String?
+  payload         String // JSON { formData, pricing } to rebuild checkout + resume
+  totalCents      Int       @default(0)
+  resumeToken     String    @unique
+  stripeSessionId String?
+  status          String    @default("started") // started | completed | recovered | expired
+  remindersSent   Int       @default(0)
+  lastReminderAt  DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([status, updatedAt])
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// Student Learning Hub
+//
+// A student-facing portal: ask questions (privately to a tutor or shared with
+// the class), upload their real school work (course outlines, school documents)
+// and chat with their tutor. "class" everywhere means a Subject row. All
+// student<->tutor communication runs through the existing Conversation/Message
+// moderation pipeline (see app/messages/actions.ts).
+// ──────────────────────────────────────────────────────────────────────────
+
+// A reusable uploaded file. In dev, files are written under /public/uploads and
+// served statically; in prod this should move to object storage (see
+// app/api/upload/route.ts).
+model FileAttachment {
+  id           String   @id @default(cuid())
+  kind         String   @default("upload") // upload | photo | screenshot | pdf
+  url          String // public path, e.g. /uploads/<id>.<ext>
+  mimeType     String?
+  sizeBytes    Int      @default(0)
+  originalName String?
+  uploadedById String?
+  uploadedBy   User?    @relation("FileUploader", fields: [uploadedById], references: [id])
+  // Back-references (a file belongs to at most one of these)
+  resource     TutorResource?
+  outline      StudentCourseOutline?
+  document     SchoolDocument?
+  questionAttachment QuestionAttachment?
+  // A chat message attachment (e.g. a photo of worked solutions).
+  messageId    String?
+  message      Message? @relation(fields: [messageId], references: [id])
+  createdAt    DateTime @default(now())
+
+  @@index([uploadedById, createdAt])
+  @@index([messageId])
+}
+
+// A short tutor-posted announcement, scoped to one class (Subject). Shown to
+// students but deliberately not the spine of the dashboard.
+model Announcement {
+  id               String   @id @default(cuid())
+  classId          String
+  class            Subject  @relation(fields: [classId], references: [id])
+  authorId         String
+  author           User     @relation("AnnouncementAuthor", fields: [authorId], references: [id])
+  body             String
+  pinned           Boolean  @default(false)
+  moderationStatus String   @default("clear") // clear | flagged | needs_review | resolved
+  deletedAt        DateTime? // soft-delete: recoverable from the admin trash
+  createdAt        DateTime @default(now())
+
+  @@index([classId, createdAt])
+}
+
+// A learning resource uploaded by a tutor (booklet, worksheet, practice test,
+// answer key…). Kept structurally separate from student-uploaded School Materials.
+model TutorResource {
+  id                String   @id @default(cuid())
+  title             String
+  description       String?
+  fileId            String?  @unique
+  file              FileAttachment? @relation(fields: [fileId], references: [id])
+  fileType          String?  // booklet | worksheet | practice_test | answer_key | revision | other
+  subject           String   // Maths | English | Science
+  yearLevel         Int
+  classId           String?
+  class             Subject? @relation(fields: [classId], references: [id])
+  uploadedByTutorId String
+  uploadedBy        User     @relation("ResourceUploader", fields: [uploadedByTutorId], references: [id])
+  weekNumber        Int?
+  topic             String?
+  visibleToStudents Boolean  @default(true)
+  deletedAt         DateTime? // soft-delete: recoverable from the admin trash
+  createdAt         DateTime @default(now())
+
+  @@index([subject, yearLevel])
+  @@index([classId])
+}
+
+// A course outline a STUDENT uploads from their school. Distinct from the
+// school-wide HSHS CourseOutline. Powers the Assessment Tracker.
+model StudentCourseOutline {
+  id               String   @id @default(cuid())
+  studentId        String
+  student          Student  @relation(fields: [studentId], references: [id])
+  subject          String
+  school           String   @default("Harrisdale SHS")
+  term             String?
+  fileId           String?  @unique
+  file             FileAttachment? @relation(fields: [fileId], references: [id])
+  assessmentCount  Int      @default(0)
+  // Future-ready: AI extraction of assessment dates / topics from the outline.
+  extractionStatus String   @default("pending") // pending | done | failed
+  extractedTopics  String?  // JSON array of topic strings
+  moderationStatus String   @default("clear")
+  assessments      StudentAssessment[]
+  linkedQuestions  QuestionAttachment[]
+  uploadedAt       DateTime @default(now())
+
+  @@index([studentId, uploadedAt])
+}
+
+// Any other school-provided document a student uploads (worksheet, assignment
+// brief, draft, teacher feedback, notes, photo of a textbook page…).
+model SchoolDocument {
+  id               String   @id @default(cuid())
+  studentId        String
+  student          Student  @relation(fields: [studentId], references: [id])
+  title            String
+  documentType     String   @default("other") // homework | worksheet | assignment | draft | feedback | notes | exam | photo | other
+  subject          String?
+  fileId           String?  @unique
+  file             FileAttachment? @relation(fields: [fileId], references: [id])
+  moderationStatus String   @default("clear")
+  linkedQuestions  QuestionAttachment[]
+  uploadedAt       DateTime @default(now())
+
+  @@index([studentId, uploadedAt])
+}
+
+// A single assessment milestone for a student, usually extracted from an uploaded
+// course outline. The shared roadmap surfaced to student, parent, tutor and admin.
+model StudentAssessment {
+  id        String   @id @default(cuid())
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id])
+  outlineId String?
+  outline   StudentCourseOutline? @relation(fields: [outlineId], references: [id])
+  subject   String
+  title     String
+  kind      String   @default("test") // test | assignment | exam | investigation
+  dueWeek   Int?
+  dueDate   DateTime?
+  notes     String?
+  createdAt DateTime @default(now())
+
+  @@index([studentId, dueDate])
+}
+
+// A student question. Either private to the tutor or shared with the class.
+model Question {
+  id               String   @id @default(cuid())
+  studentId        String
+  student          Student  @relation(fields: [studentId], references: [id])
+  classId          String
+  class            Subject  @relation(fields: [classId], references: [id])
+  title            String
+  body             String
+  visibility       String   @default("private_to_tutor") // private_to_tutor | public_to_class
+  status           String   @default("waiting_for_tutor") // waiting_for_tutor | tutor_replied | follow_up_needed | solved
+  topic            String?
+  moderationStatus String   @default("clear")
+  blocked          Boolean  @default(false) // withheld from the class if malicious
+  pinnedReplyId    String?
+  replies          QuestionReply[]
+  reactions        QuestionReaction[]
+  attachments      QuestionAttachment[]
+  createdAt        DateTime @default(now())
+
+  @@index([classId, status, createdAt])
+  @@index([studentId, createdAt])
+}
+
+model QuestionReply {
+  id               String   @id @default(cuid())
+  questionId       String
+  question         Question @relation(fields: [questionId], references: [id])
+  authorId         String
+  author           User     @relation("ReplyAuthor", fields: [authorId], references: [id])
+  body             String
+  isTutor          Boolean  @default(false)
+  helpful          Boolean  @default(false) // student marked this answer helpful
+  pinned           Boolean  @default(false) // tutor pinned this answer for the class
+  moderationStatus String   @default("clear")
+  blocked          Boolean  @default(false)
+  createdAt        DateTime @default(now())
+
+  @@index([questionId, createdAt])
+}
+
+// "I have this question too" tally. One per student per question.
+model QuestionReaction {
+  id         String   @id @default(cuid())
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id])
+  studentId  String
+  student    Student  @relation(fields: [studentId], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@unique([questionId, studentId])
+}
+
+// Links a question to a school material (outline/document) or a fresh upload.
+model QuestionAttachment {
+  id         String   @id @default(cuid())
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id])
+  sourceType String // course_outline | school_document | direct_upload
+  outlineId  String?
+  outline    StudentCourseOutline? @relation(fields: [outlineId], references: [id])
+  documentId String?
+  document   SchoolDocument?       @relation(fields: [documentId], references: [id])
+  fileId     String?  @unique
+  file       FileAttachment?       @relation(fields: [fileId], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@index([questionId])
+}
+
+// ── Semantic search index ─────────────────────────────────────────────────────
+// One row per searchable record (student, note, question, resource…). Stores the
+// text we embedded and the embedding vector as JSON. lib/embeddings.ts fills the
+// vector via Voyage when VOYAGE_API_KEY is set, otherwise a deterministic local
+// fallback so search still works in dev. Cosine ranking lives in lib/search.ts.
+model SearchDocument {
+  id        String   @id @default(cuid())
+  entity    String   // Student | Question | StudentNote | TutorResource | Subject
+  entityId  String
+  title     String
+  body      String
+  url       String?  // where to open the result in the CRM
+  embedding String?  // JSON array of floats (the vector), null until embedded
+  model     String?  // which embedding model produced the vector
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  @@unique([entity, entityId])
+  @@index([entity])
+}
+
+// ── AI cost governance ────────────────────────────────────────────────────────
+// Content-addressed cache: identical (task + prompt) inputs reuse a stored output
+// instead of re-calling the model. See lib/ai-cache.ts.
+model AiCache {
+  id        String   @id @default(cuid())
+  key       String   @unique // sha256(task + system + messages)
+  task      String
+  model     String
+  output    String
+  hits      Int      @default(0)
+  createdAt DateTime @default(now())
+  lastUsed  DateTime @default(now())
+
+  @@index([task, createdAt])
+}
+
+// Per-call usage ledger powering per-task monthly budgets (lib/ai-budget.ts).
+model AiUsage {
+  id           String   @id @default(cuid())
+  task         String
+  model        String
+  inputTokens  Int      @default(0)
+  outputTokens Int      @default(0)
+  costCents    Float    @default(0)
+  cached       Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  @@index([task, createdAt])
+  @@index([createdAt])
+}
+
+// Tracks an Anthropic Message Batch submitted by the nightly runner (term report
+// drafting). The batch is created in one cron tick and its results collected in a
+// later tick, so we persist the request->record mapping + a deterministic
+// fallback per request. See lib/ai-batch.ts.
+model AiBatch {
+  id              String    @id @default(cuid())
+  providerBatchId String    @unique
+  kind            String    @default("term-reports")
+  termId          String?
+  status          String    @default("submitted") // submitted | applied | failed | empty
+  requestCount    Int       @default(0)
+  appliedCount    Int       @default(0)
+  mapping         String    // JSON: { [customId]: { studentId, subjectId, fallback, existingReportId } }
+  createdAt       DateTime  @default(now())
+  appliedAt       DateTime?
+
+  @@index([status, createdAt])
+}
+
+// A device/network an account has signed in from before. The first time an
+// account that already has a known device signs in from a new one, admins are
+// alerted (lib/device-watch.ts) - a lightweight account-takeover tripwire.
+model KnownDevice {
+  id          String   @id @default(cuid())
+  userId      String
+  fingerprint String   // coarse hash of network + user-agent family
+  ip          String?
+  userAgent   String?
+  lastSeenAt  DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  @@unique([userId, fingerprint])
+  @@index([userId])
+}
+
+// A stored AI-generated brief (the proactive morning digest). Generated by a
+// nightly cron (lib/digest.ts) and shown on the admin overview.
+model Digest {
+  id        String   @id @default(cuid())
+  kind      String   @default("morning") // morning | weekly
+  body      String   // markdown-ish brief
+  live      Boolean  @default(false) // produced by a live model vs deterministic
+  createdAt DateTime @default(now())
+
+  @@index([kind, createdAt])
+}

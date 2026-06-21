@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#070b14" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23070b14'/%3E%3Cpath d='M8 82 L38 30 L52 52 L66 22 L92 82 Z' fill='none' stroke='%237fe3da' stroke-width='6' stroke-linejoin='round'/%3E%3Cpath d='M61 31 L66 22 L74 38 L69 36 L64 41 L60 37 Z' fill='%23f4c057'/%3E%3C/svg%3E" />
+<title>Everest Tutoring — Reach Your Summit</title>
+<meta name="description" content="Everest Tutoring pairs ambitious students with elite mentors. One-to-one tuition that turns the impossible climb into a guided ascent." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..700&family=Albert+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    --ink:#070b14;
+    --ink-2:#0c1322;
+    --night:#0f1b30;
+    --glacier:#7fe3da;
+    --glacier-deep:#2bb2a8;
+    --teal:#3a8d9c;
+    --summit:#f4c057;
+    --summit-warm:#ff9d5c;
+    --snow:#eef4ff;
+    --mist:#9fb0c9;
+    --line:rgba(159,176,201,.16);
+    --display:"Fraunces", serif;
+    --body:"Albert Sans", sans-serif;
+    --ease:cubic-bezier(.16,1,.3,1);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:auto;color-scheme:dark}
+  body{
+    background:var(--ink);
+    color:var(--snow);
+    font-family:var(--body);
+    font-weight:400;
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    cursor:none;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:rgba(244,192,87,.2);
+  }
+  /* fixed-nav anchor offset */
+  section[id],header[id]{scroll-margin-top:90px}
+  h1,h2,.h2,.cta h2{text-wrap:balance}
+  body.is-loading{overflow:hidden;height:100vh}
+  @media (max-width:760px){ body{cursor:auto} }
+
+  ::selection{background:var(--summit);color:var(--ink)}
+
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  button{font-family:inherit;cursor:none;border:none;background:none;color:inherit}
+  @media (max-width:760px){ button{cursor:pointer} }
+
+  /* visible keyboard focus for accessibility */
+  :focus-visible{outline:2px solid var(--summit);outline-offset:3px;border-radius:4px}
+
+  .skip{position:absolute;left:1rem;top:-100px;z-index:10000;background:var(--summit);color:var(--ink);padding:.7rem 1.2rem;border-radius:8px;font-weight:600;transition:top .3s}
+  .skip:focus{top:1rem}
+
+  .wrap{width:min(1240px,92vw);margin-inline:auto}
+
+  /* grain overlay */
+  body::after{
+    content:"";position:fixed;inset:0;z-index:9990;pointer-events:none;
+    opacity:.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ===== custom cursor ===== */
+  .cursor-dot,.cursor-ring{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;border-radius:50%;mix-blend-mode:difference}
+  .cursor-dot{width:7px;height:7px;background:#fff;transform:translate(-50%,-50%)}
+  .cursor-ring{width:42px;height:42px;border:1px solid rgba(255,255,255,.6);transform:translate(-50%,-50%);transition:width .35s var(--ease),height .35s var(--ease),background .35s var(--ease),border-color .35s var(--ease)}
+  .cursor-ring.is-hover{width:74px;height:74px;background:rgba(244,192,87,.12);border-color:rgba(244,192,87,.55)}
+  @media (max-width:760px){ .cursor-dot,.cursor-ring{display:none} }
+
+  /* ===== preloader ===== */
+  #preloader{position:fixed;inset:0;z-index:9995;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem}
+  .pl-mark{font-family:var(--display);font-weight:300;font-size:clamp(2.4rem,7vw,5rem);letter-spacing:-.02em;line-height:1;overflow:hidden;height:1.05em}
+  .pl-mark span{display:inline-block;transform:translateY(110%)}
+  .pl-bar{width:min(320px,70vw);height:1px;background:var(--line);position:relative;overflow:hidden}
+  .pl-bar i{position:absolute;inset:0;background:linear-gradient(90deg,var(--glacier),var(--summit));transform:scaleX(0);transform-origin:left}
+  .pl-count{font-size:.78rem;letter-spacing:.4em;color:var(--mist);text-transform:uppercase}
+
+  /* ===== nav ===== */
+  #nav{position:fixed;top:0;left:0;right:0;z-index:900;padding:1.5rem 0;transition:padding .5s var(--ease)}
+  /* blurred bar on a pseudo-element so it never becomes the containing block for the fixed mobile menu */
+  #nav::before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;background:rgba(7,11,20,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);transition:opacity .5s var(--ease)}
+  #nav.scrolled{padding:.85rem 0}
+  #nav.scrolled::before{opacity:1}
+  .nav-in{display:flex;align-items:center;justify-content:space-between}
+  .logo{display:flex;align-items:center;gap:.6rem;font-family:var(--display);font-weight:500;font-size:1.25rem;letter-spacing:-.01em}
+  .logo svg{width:26px;height:26px;overflow:visible}
+  .logo .peak{stroke:var(--glacier);stroke-width:6;fill:none;stroke-linejoin:round;stroke-linecap:round}
+  .logo .snowcap{fill:var(--summit)}
+  .nav-links{display:flex;gap:2.2rem;align-items:center}
+  .nav-links a{font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mist);position:relative;transition:color .4s}
+  .nav-links a:not(.nav-cta)::after{content:"";position:absolute;left:0;bottom:-6px;height:1px;width:0;background:var(--summit);transition:width .4s var(--ease)}
+  .nav-links a:hover{color:var(--snow)}
+  .nav-links a:not(.nav-cta):hover::after{width:100%}
+  .nav-cta{padding:.6rem 1.3rem;border:1px solid var(--line);border-radius:100px;color:var(--snow)!important;letter-spacing:.04em;transition:background .4s var(--ease),color .4s var(--ease),border-color .4s var(--ease)}
+  .nav-cta:hover{background:var(--summit);color:var(--ink)!important;border-color:var(--summit)}
+  .burger{display:none;flex-direction:column;gap:5px}
+  .burger span{width:26px;height:2px;background:var(--snow);transition:transform .3s var(--ease),opacity .3s var(--ease)}
+  @media (max-width:860px){
+    .nav-links{position:fixed;inset:0;background:var(--ink-2);flex-direction:column;justify-content:center;gap:2rem;transform:translateY(-100%);transition:transform .6s var(--ease);z-index:899;overscroll-behavior:contain}
+    .nav-links a{font-size:1.4rem}
+    .nav-links.open{transform:translateY(0)}
+    .burger{display:flex;z-index:901}
+    #nav.menu-open .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    #nav.menu-open .burger span:nth-child(2){opacity:0}
+    #nav.menu-open .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  }
+
+  /* ===== hero ===== */
+  .hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;padding-bottom:6vh;overflow:hidden}
+  #scene{position:absolute;inset:0;z-index:0}
+  .hero-glow{position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:
+      radial-gradient(120% 80% at 50% 120%,rgba(244,192,87,.18),transparent 55%),
+      radial-gradient(90% 60% at 80% 8%,rgba(127,227,218,.12),transparent 60%),
+      linear-gradient(180deg,rgba(7,11,20,.55) 0%,transparent 28%,transparent 60%,var(--ink) 99%);
+  }
+  .hero-in{position:relative;z-index:3}
+  .hero-tag{display:inline-flex;align-items:center;gap:.7rem;font-size:.74rem;letter-spacing:.34em;text-transform:uppercase;color:var(--glacier);margin-bottom:1.6rem}
+  .hero-tag::before{content:"";width:34px;height:1px;background:var(--glacier)}
+  .hero h1{font-family:var(--display);font-weight:300;font-size:clamp(2.8rem,9vw,7.6rem);line-height:.96;letter-spacing:-.03em}
+  .hero h1 .ln{display:block;overflow:hidden}
+  .hero h1 .ln > span{display:inline-block;transform:translateY(110%)}
+  .hero h1 em{font-style:italic;font-weight:400;color:var(--summit)}
+  .hero h1 .light{color:var(--mist)}
+  .hero-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:2rem;margin-top:2.4rem}
+  .hero-lead{max-width:46ch;color:var(--mist);font-size:1.06rem}
+  .scroll-cue{display:flex;align-items:center;gap:.7rem;font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mist)}
+  .scroll-cue .ln-anim{width:46px;height:1px;background:var(--line);position:relative;overflow:hidden}
+  .scroll-cue .ln-anim::after{content:"";position:absolute;inset:0;background:var(--summit);animation:cue 2.2s var(--ease) infinite}
+  @keyframes cue{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
+
+  .btn{position:relative;display:inline-flex;align-items:center;gap:.7rem;padding:1rem 2rem;border-radius:100px;font-weight:600;letter-spacing:.02em;overflow:hidden;isolation:isolate}
+  .btn-primary{background:var(--summit);color:var(--ink)}
+  .btn-primary::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(120deg,var(--summit-warm),var(--summit));transform:translateY(101%);transition:transform .5s var(--ease)}
+  .btn-primary:hover::before{transform:translateY(0)}
+  .btn .arr{transition:transform .4s var(--ease)}
+  .btn:hover .arr{transform:translate(4px,-4px)}
+
+  /* ===== section scaffolding ===== */
+  section{position:relative;z-index:5}
+  .pad{padding:clamp(6rem,13vh,11rem) 0}
+  .eyebrow{font-size:.74rem;letter-spacing:.34em;text-transform:uppercase;color:var(--glacier);display:flex;align-items:center;gap:.8rem;margin-bottom:1.6rem}
+  .eyebrow::before{content:"";width:30px;height:1px;background:var(--glacier-deep)}
+  .h2{font-family:var(--display);font-weight:300;font-size:clamp(2.2rem,5.5vw,4.4rem);line-height:1.02;letter-spacing:-.02em}
+  .h2 em{font-style:italic;color:var(--summit)}
+  .reveal{opacity:0;transform:translateY(40px)}
+  .split-line{overflow:hidden;display:block}
+
+  /* ===== marquee ===== */
+  .marquee{border-block:1px solid var(--line);padding:1.5rem 0;overflow:hidden;white-space:nowrap;background:var(--ink-2)}
+  .marquee-track{display:inline-flex;gap:3.5rem;align-items:center;will-change:transform}
+  .marquee-track span{font-family:var(--display);font-style:italic;font-weight:300;font-size:1.5rem;color:var(--mist)}
+  .marquee-track .dot{width:7px;height:7px;border-radius:50%;background:var(--summit);display:inline-block}
+
+  /* ===== stats ===== */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem}
+  .stat{border-top:1px solid var(--line);padding-top:1.5rem}
+  .stat .num{font-family:var(--display);font-weight:300;font-size:clamp(2.6rem,5vw,4rem);line-height:1;letter-spacing:-.02em;color:var(--snow);font-variant-numeric:tabular-nums}
+  .stat .num em{font-style:normal;color:var(--summit)}
+  .stat .lbl{margin-top:.7rem;color:var(--mist);font-size:.92rem;max-width:22ch}
+  @media (max-width:860px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+  /* ===== programs ===== */
+  .prog-head{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;flex-wrap:wrap;margin-bottom:3.5rem}
+  .prog-head p{max-width:40ch;color:var(--mist)}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+  @media (max-width:980px){.cards{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:620px){.cards{grid-template-columns:1fr}}
+  .card{position:relative;padding:2.2rem;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,rgba(15,27,48,.5),rgba(12,19,34,.3));overflow:hidden;transition:transform .6s var(--ease),border-color .6s}
+  .card::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 0%,rgba(127,227,218,.14),transparent 55%);opacity:0;transition:opacity .6s}
+  .card:hover{transform:translateY(-8px);border-color:rgba(127,227,218,.4)}
+  .card:hover::before{opacity:1}
+  .card .idx{font-family:var(--display);font-size:.9rem;color:var(--teal);letter-spacing:.1em}
+  .card h3{font-family:var(--display);font-weight:400;font-size:1.7rem;margin:1.4rem 0 .8rem;letter-spacing:-.01em}
+  .card p{color:var(--mist);font-size:.96rem}
+  .card .tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.6rem}
+  .card .tags span{font-size:.72rem;letter-spacing:.04em;padding:.32rem .7rem;border:1px solid var(--line);border-radius:100px;color:var(--mist)}
+  .card .glyph{position:absolute;top:1.8rem;right:1.8rem;width:30px;height:30px;color:var(--summit);opacity:.6}
+
+  /* ===== ascent (process) ===== */
+  .ascent-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:5rem;align-items:start}
+  @media (max-width:920px){.ascent-grid{grid-template-columns:1fr;gap:3rem}}
+  .ascent-sticky{position:sticky;top:18vh}
+  @media (max-width:920px){.ascent-sticky{position:static}}
+  .ascent-sticky .label{font-family:var(--display);font-style:italic;font-size:1.3rem;color:var(--summit);margin-bottom:1rem}
+  .steps{display:flex;flex-direction:column;gap:1.2rem}
+  .step{border:1px solid var(--line);border-radius:16px;padding:1.8rem;background:rgba(12,19,34,.4);transition:transform .55s var(--ease),background .55s var(--ease),border-color .55s var(--ease)}
+  .step.active{border-color:rgba(244,192,87,.5);background:rgba(15,27,48,.7);transform:scale(1.015)}
+  .step .top{display:flex;align-items:baseline;gap:1rem}
+  .step .alt{font-family:var(--display);font-size:.85rem;color:var(--teal);letter-spacing:.1em;min-width:64px}
+  .step h4{font-family:var(--display);font-weight:400;font-size:1.5rem;letter-spacing:-.01em}
+  .step p{color:var(--mist);margin-top:.7rem;font-size:.96rem}
+  .alt-track{margin-top:1.2rem;height:3px;background:var(--line);border-radius:3px;overflow:hidden}
+  .alt-track i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--glacier),var(--summit));transition:width .6s var(--ease)}
+
+  /* ===== mentors ===== */
+  .mentors-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:3.5rem}
+  @media (max-width:860px){.mentors-row{grid-template-columns:1fr}}
+  .mentor{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);aspect-ratio:3/3.6;display:flex;align-items:flex-end;padding:1.8rem;isolation:isolate}
+  .mentor canvas{position:absolute;inset:0;z-index:-2;width:100%;height:100%}
+  .mentor::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,transparent 30%,rgba(7,11,20,.92))}
+  .mentor .who h4{font-family:var(--display);font-weight:400;font-size:1.45rem}
+  .mentor .who p{color:var(--glacier);font-size:.84rem;letter-spacing:.04em;margin-top:.2rem}
+  .mentor .who small{display:block;color:var(--mist);font-size:.82rem;margin-top:.7rem;line-height:1.5}
+
+  /* ===== testimonial ===== */
+  .quote-wrap{max-width:60ch;margin-inline:auto;text-align:center}
+  .quote-wrap blockquote{font-family:var(--display);font-weight:300;font-style:italic;font-size:clamp(1.6rem,4vw,3rem);line-height:1.22;letter-spacing:-.01em}
+  .quote-wrap blockquote em{color:var(--summit);font-style:italic}
+  .quote-cite{margin-top:2rem;font-size:.84rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mist)}
+  .quote-cite b{color:var(--snow);font-weight:600}
+
+  /* ===== CTA ===== */
+  .cta{position:relative;overflow:hidden;border-radius:26px;padding:clamp(3rem,8vw,6rem);text-align:center;background:linear-gradient(160deg,var(--night),var(--ink-2));border:1px solid var(--line)}
+  .cta::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%,rgba(244,192,87,.18),transparent 60%);pointer-events:none}
+  .cta h2{font-family:var(--display);font-weight:300;font-size:clamp(2.2rem,6vw,4.6rem);line-height:1.02;letter-spacing:-.02em;position:relative}
+  .cta h2 em{font-style:italic;color:var(--summit)}
+  .cta p{color:var(--mist);max-width:48ch;margin:1.4rem auto 2.4rem;position:relative}
+  .cta-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;position:relative}
+  .btn-ghost{border:1px solid var(--line);color:var(--snow)}
+  .btn-ghost:hover{border-color:var(--summit)}
+
+  /* ===== footer ===== */
+  footer{padding:4rem 0 3rem;border-top:1px solid var(--line);margin-top:6rem}
+  .foot-grid{display:flex;justify-content:space-between;gap:3rem;flex-wrap:wrap;align-items:flex-start}
+  .foot-grid .logo{font-size:1.6rem}
+  .foot-cols{display:flex;gap:4rem;flex-wrap:wrap}
+  .foot-col h2{font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);margin-bottom:1rem;font-weight:600;font-family:var(--body)}
+  .foot-col a{display:block;color:var(--snow);opacity:.8;margin-bottom:.6rem;font-size:.95rem;transition:opacity .3s var(--ease),color .3s var(--ease)}
+  .foot-col a:hover{opacity:1;color:var(--summit)}
+  .foot-base{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-top:3.5rem;padding-top:1.8rem;border-top:1px solid var(--line);color:var(--mist);font-size:.84rem}
+
+  /* progress bar */
+  .progress{position:fixed;top:0;left:0;height:2px;width:100%;transform:scaleX(0);transform-origin:left;background:linear-gradient(90deg,var(--glacier),var(--summit));z-index:950}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+    .reveal{opacity:1;transform:none}
+    .hero h1 .ln>span,.pl-mark span{transform:none}
+  }
+</style>
+</head>
+<body class="is-loading">
+
+  <a href="#main" class="skip">Skip to content</a>
+
+  <!-- cursor -->
+  <div class="cursor-ring" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="progress" aria-hidden="true"></div>
+
+  <!-- preloader -->
+  <div id="preloader" aria-hidden="true">
+    <div class="pl-mark"><span>Everest</span></div>
+    <div class="pl-bar"><i></i></div>
+    <div class="pl-count">0%</div>
+  </div>
+
+  <!-- nav -->
+  <nav id="nav" aria-label="Primary">
+    <div class="wrap nav-in">
+      <a href="#top" class="logo" aria-label="Everest Tutoring home">
+        <svg viewBox="0 0 100 100" aria-hidden="true">
+          <path class="peak" d="M8 82 L38 30 L52 52 L66 22 L92 82 Z"/>
+          <path class="snowcap" d="M61 31 L66 22 L74 38 L69 36 L64 41 L60 37 Z"/>
+        </svg>
+        Everest
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#programs">Programs</a>
+        <a href="#ascent">The Ascent</a>
+        <a href="#mentors">Mentors</a>
+        <a href="#results">Results</a>
+        <a href="#enrol" class="nav-cta">Book a Trial</a>
+      </div>
+      <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <main id="main">
+  <!-- hero -->
+  <header class="hero" id="top">
+    <div id="scene" aria-hidden="true"></div>
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="wrap hero-in">
+      <p class="hero-tag reveal">Elite 1-to-1 Tuition</p>
+      <h1>
+        <span class="ln"><span>Every summit</span></span>
+        <span class="ln"><span>begins with a <em>single</em></span></span>
+        <span class="ln"><span class="light">guided step.</span></span>
+      </h1>
+      <div class="hero-bottom">
+        <p class="hero-lead reveal">Everest Tutoring pairs ambitious students with mentors from the world’s best universities — turning the impossible climb into a route you can actually see.</p>
+        <a href="#enrol" class="btn btn-primary reveal" data-cta>
+          Begin the ascent
+          <svg class="arr" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="hero-bottom" style="margin-top:2.6rem">
+        <span class="scroll-cue reveal">Scroll to climb <span class="ln-anim" aria-hidden="true"></span></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- marquee -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marquee">
+      <span>Oxford</span><i class="dot"></i><span>Cambridge</span><i class="dot"></i><span>Imperial</span><i class="dot"></i><span>Harvard</span><i class="dot"></i><span>MIT</span><i class="dot"></i><span>Stanford</span><i class="dot"></i><span>UCL</span><i class="dot"></i><span>LSE</span><i class="dot"></i>
+    </div>
+  </div>
+
+  <!-- stats -->
+  <section class="pad" id="results" aria-labelledby="results-h">
+    <div class="wrap">
+      <p class="eyebrow reveal" id="results-h">By the numbers</p>
+      <div class="stats">
+        <div class="stat reveal"><div class="num" data-count="2400" data-suffix="+">2,400+</div><p class="lbl">students mentored to their first-choice destination</p></div>
+        <div class="stat reveal"><div class="num" data-count="94" data-suffix="%">94%</div><p class="lbl">reached or exceeded their target grade</p></div>
+        <div class="stat reveal"><div class="num"><em>3.2</em></div><p class="lbl">average grades climbed within two terms</p></div>
+        <div class="stat reveal"><div class="num" data-count="150" data-suffix="+">150+</div><p class="lbl">specialist mentors across 40 subjects</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- programs -->
+  <section class="pad" id="programs" aria-labelledby="programs-h">
+    <div class="wrap">
+      <div class="prog-head">
+        <div>
+          <p class="eyebrow reveal">Programs</p>
+          <h2 class="h2 reveal" id="programs-h">Routes to the <em>top</em>.</h2>
+        </div>
+        <p class="reveal">Every learner gets a bespoke expedition plan — not a one-size syllabus. Choose a base camp and we build the climb around it.</p>
+      </div>
+      <div class="cards">
+        <article class="card reveal">
+          <svg class="glyph" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v18M5 10l7-7 7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p class="idx">01 — Foundations</p>
+          <h3>GCSE Mastery</h3>
+          <p>Close every gap and build unshakeable fundamentals across the sciences, maths and humanities with weekly one-to-one coaching.</p>
+          <div class="tags"><span>Maths</span><span>Sciences</span><span>English</span><span>Languages</span></div>
+        </article>
+        <article class="card reveal">
+          <svg class="glyph" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19h16M7 19V9m5 10V5m5 14v-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <p class="idx">02 — Ascent</p>
+          <h3>A-Level &amp; IB</h3>
+          <p>Push from competent to exceptional. Examiner-led technique, past-paper drilling and the mindset that separates A from A*.</p>
+          <div class="tags"><span>Further Maths</span><span>Physics</span><span>Economics</span><span>Biology</span></div>
+        </article>
+        <article class="card reveal">
+          <svg class="glyph" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l2.4 6.5L21 9l-5 4.6L17.5 21 12 17l-5.5 4L8 13.6 3 9l6.6-.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          <p class="idx">03 — Summit</p>
+          <h3>Oxbridge &amp; Ivy</h3>
+          <p>Admissions tests, personal statements and interview craft from mentors who sat in those very seats — and got the offer.</p>
+          <div class="tags"><span>UCAT / LNAT</span><span>Interviews</span><span>Portfolios</span><span>Essays</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ascent / process -->
+  <section class="pad" id="ascent" aria-labelledby="ascent-h">
+    <div class="wrap ascent-grid">
+      <div class="ascent-sticky">
+        <p class="eyebrow reveal">The Ascent</p>
+        <h2 class="h2 reveal" id="ascent-h">Four camps<br/>to the <em>peak</em>.</h2>
+        <p class="label reveal" style="margin-top:1.6rem">Altitude climbed →</p>
+        <p class="reveal" style="color:var(--mist);max-width:34ch;margin-top:.6rem">A proven, step-by-step method. We never skip a camp — that’s how summits are reached safely.</p>
+      </div>
+      <div class="steps" id="steps">
+        <div class="step">
+          <div class="top"><span class="alt">2,400m</span><h3>Base Camp — Diagnose</h3></div>
+          <p>A deep diagnostic maps exactly where you stand. No assumptions, just a clear picture of the terrain ahead.</p>
+          <div class="alt-track" aria-hidden="true"><i></i></div>
+        </div>
+        <div class="step">
+          <div class="top"><span class="alt">4,200m</span><h3>Camp II — Plan the Route</h3></div>
+          <p>Your mentor charts a personalised expedition plan, mapped to your exam boards, deadlines and ambitions.</p>
+          <div class="alt-track" aria-hidden="true"><i></i></div>
+        </div>
+        <div class="step">
+          <div class="top"><span class="alt">6,800m</span><h3>Camp III — Climb Weekly</h3></div>
+          <p>Focused one-to-one sessions, deliberate practice and relentless feedback. Momentum compounds, week on week.</p>
+          <div class="alt-track" aria-hidden="true"><i></i></div>
+        </div>
+        <div class="step">
+          <div class="top"><span class="alt">8,849m</span><h3>Summit — Perform</h3></div>
+          <p>Walk into the exam hall calm, drilled and certain. The view from the top is yours to keep.</p>
+          <div class="alt-track" aria-hidden="true"><i></i></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- mentors -->
+  <section class="pad" id="mentors" aria-labelledby="mentors-h">
+    <div class="wrap">
+      <div class="prog-head">
+        <div>
+          <p class="eyebrow reveal">The Guides</p>
+          <h2 class="h2 reveal" id="mentors-h">Mentors who’ve <em>summited</em>.</h2>
+        </div>
+        <p class="reveal">Every mentor is hand-picked, rigorously vetted and trained in our method. They’ve walked the route — now they’ll walk it with you.</p>
+      </div>
+      <div class="mentors-row">
+        <article class="mentor reveal">
+          <canvas data-hue="170" aria-hidden="true"></canvas>
+          <div class="who"><h3>Dr. Amara Okafor</h3><p>Cambridge — Natural Sciences</p><small>9 years guiding students into medicine &amp; the sciences. 100+ med-school offers.</small></div>
+        </article>
+        <article class="mentor reveal">
+          <canvas data-hue="42" aria-hidden="true"></canvas>
+          <div class="who"><h3>James Whitfield</h3><p>Oxford — PPE</p><small>Examiner and interview coach. Specialist in essay subjects &amp; admissions strategy.</small></div>
+        </article>
+        <article class="mentor reveal">
+          <canvas data-hue="200" aria-hidden="true"></canvas>
+          <div class="who"><h3>Priya Raman</h3><p>Imperial — Mathematics</p><small>From struggling at GCSE to a first at Imperial. Turns maths fear into fluency.</small></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- testimonial -->
+  <section class="pad" aria-label="Student testimonial">
+    <div class="wrap quote-wrap reveal">
+      <blockquote>“I went from a predicted C to an <em>A*</em> and an offer from Cambridge. Everest didn’t just teach me — they showed me the whole mountain, then handed me the rope.”</blockquote>
+      <p class="quote-cite"><b>Sofia M.</b> &nbsp;·&nbsp; Now reading Engineering, Cambridge</p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="pad" id="enrol" aria-labelledby="enrol-h">
+    <div class="wrap">
+      <div class="cta reveal">
+        <h2 id="enrol-h">Your summit is <em>waiting</em>.</h2>
+        <p>Book a free 30-minute strategy call. We’ll map your route and pair you with the mentor who’ll get you there.</p>
+        <div class="cta-actions">
+          <a href="#" class="btn btn-primary" data-cta>
+            Book a free trial
+            <svg class="arr" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M17 7H9M17 7V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#programs" class="btn btn-ghost" data-cta>Explore programs</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <!-- footer -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div style="max-width:30ch">
+          <a href="#top" class="logo" aria-label="Everest Tutoring home">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <path class="peak" d="M8 82 L38 30 L52 52 L66 22 L92 82 Z"/>
+              <path class="snowcap" d="M61 31 L66 22 L74 38 L69 36 L64 41 L60 37 Z"/>
+            </svg>
+            Everest
+          </a>
+          <p style="color:var(--mist);margin-top:1rem;font-size:.95rem">Guided ascents in education. One student, one mentor, one summit at a time.</p>
+        </div>
+        <nav class="foot-cols" aria-label="Footer">
+          <div class="foot-col">
+            <h2>Programs</h2>
+            <a href="#programs">GCSE Mastery</a>
+            <a href="#programs">A-Level &amp; IB</a>
+            <a href="#programs">Oxbridge &amp; Ivy</a>
+            <a href="#programs">Admissions Tests</a>
+          </div>
+          <div class="foot-col">
+            <h2>Company</h2>
+            <a href="#mentors">Our Mentors</a>
+            <a href="#ascent">The Method</a>
+            <a href="#results">Results</a>
+            <a href="#enrol">Contact</a>
+          </div>
+          <div class="foot-col">
+            <h2>Connect</h2>
+            <a href="#">Instagram</a>
+            <a href="#">LinkedIn</a>
+            <a href="mailto:hello@everest.edu">hello@everest.edu</a>
+          </div>
+        </nav>
+      </div>
+      <div class="foot-base">
+        <span>© 2026 Everest Tutoring. All routes reserved.</span>
+        <span>Designed for the climb.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script type="importmap">
+  { "imports": { "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js" } }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.matchMedia('(max-width:760px)').matches;
+
+    /* ============ THREE.JS — alpine wireframe range + snow ============ */
+    let renderer, scene, camera, terrain, snow, rafId, scrollY = 0;
+    function initScene(){
+      const host = document.getElementById('scene');
+      if(!host || !window.WebGLRenderingContext) return false;
+      scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x070b14, 0.055);
+
+      camera = new THREE.PerspectiveCamera(58, innerWidth/innerHeight, 0.1, 100);
+      camera.position.set(0, 3.2, 11);
+      camera.lookAt(0, 1.4, 0);
+
+      renderer = new THREE.WebGLRenderer({antialias:true, alpha:true, powerPreference:'high-performance'});
+      renderer.setSize(innerWidth, innerHeight);
+      renderer.setPixelRatio(Math.min(devicePixelRatio, isMobile?1.5:2));
+      host.appendChild(renderer.domElement);
+
+      // ---- terrain ----
+      const W = 60, D = 60, SEG = isMobile?80:140;
+      const geo = new THREE.PlaneGeometry(W, D, SEG, SEG);
+      geo.rotateX(-Math.PI/2);
+      const pos = geo.attributes.position;
+      const base = new Float32Array(pos.count);
+      function ridge(x, z){
+        let h = 0;
+        h += Math.sin(x*0.18) * Math.cos(z*0.16) * 3.4;
+        h += Math.sin(x*0.42 + 1.3) * Math.cos(z*0.33) * 1.5;
+        h += Math.sin(x*0.9 + z*0.4) * 0.6;
+        const central = Math.max(0, 4.5 - Math.abs(x)*0.32) * Math.max(0,Math.cos(z*0.05));
+        h += central;
+        return h;
+      }
+      for(let i=0;i<pos.count;i++){
+        const x = pos.getX(i), z = pos.getZ(i);
+        const h = ridge(x,z);
+        base[i] = h;
+        pos.setY(i, h);
+      }
+      geo.computeVertexNormals();
+
+      const colors = [];
+      const cLow = new THREE.Color(0x143042);
+      const cMid = new THREE.Color(0x2bb2a8);
+      const cHigh = new THREE.Color(0xf4c057);
+      for(let i=0;i<pos.count;i++){
+        const h = base[i];
+        const t = THREE.MathUtils.clamp((h+2)/7,0,1);
+        const c = t < 0.6 ? cLow.clone().lerp(cMid, t/0.6) : cMid.clone().lerp(cHigh,(t-0.6)/0.4);
+        colors.push(c.r,c.g,c.b);
+      }
+      geo.setAttribute('color', new THREE.Float32BufferAttribute(colors,3));
+
+      const mat = new THREE.MeshBasicMaterial({wireframe:true, vertexColors:true, transparent:true, opacity:0.62});
+      terrain = new THREE.Mesh(geo, mat);
+      terrain.position.z = -6;
+      terrain.userData.base = base;
+      scene.add(terrain);
+
+      const summit = new THREE.Mesh(new THREE.SphereGeometry(0.18, 16, 16), new THREE.MeshBasicMaterial({color:0xfff0c0}));
+      summit.position.set(0, 5.4, -6);
+      scene.add(summit);
+
+      // ---- snow ----
+      const count = isMobile?500:1400;
+      const sgeo = new THREE.BufferGeometry();
+      const sp = new Float32Array(count*3);
+      const sv = new Float32Array(count);
+      for(let i=0;i<count;i++){
+        sp[i*3]   = (Math.random()-0.5)*50;
+        sp[i*3+1] = Math.random()*24;
+        sp[i*3+2] = (Math.random()-0.5)*40 - 4;
+        sv[i] = 0.008 + Math.random()*0.02;
+      }
+      sgeo.setAttribute('position', new THREE.BufferAttribute(sp,3));
+      snow = new THREE.Points(sgeo, new THREE.PointsMaterial({color:0xeef4ff, size:0.07, transparent:true, opacity:0.8, depthWrite:false}));
+      snow.userData.vel = sv;
+      scene.add(snow);
+
+      animate();
+      return true;
+    }
+
+    let pointerX = 0, pointerY = 0;
+    window.addEventListener('pointermove', e=>{
+      pointerX = (e.clientX/innerWidth - 0.5);
+      pointerY = (e.clientY/innerHeight - 0.5);
+    });
+
+    const clock = { t:0 };
+    function animate(){
+      rafId = requestAnimationFrame(animate);
+      clock.t += 0.01;
+      const t = clock.t;
+      if(terrain){
+        const pos = terrain.geometry.attributes.position;
+        const base = terrain.userData.base;
+        for(let i=0;i<pos.count;i++){
+          const x = pos.getX(i);
+          pos.setY(i, base[i] + Math.sin(t*0.8 + x*0.5 + i*0.0007)*0.12);
+        }
+        pos.needsUpdate = true;
+        terrain.rotation.z = Math.sin(t*0.1)*0.015;
+      }
+      if(snow){
+        const p = snow.geometry.attributes.position;
+        const v = snow.userData.vel;
+        for(let i=0;i<v.length;i++){
+          let y = p.getY(i) - v[i]*6;
+          let x = p.getX(i) + Math.sin(t + i)*0.004;
+          if(y < -2){ y = 22; }
+          p.setY(i,y); p.setX(i,x);
+        }
+        p.needsUpdate = true;
+      }
+      const targetX = pointerX*1.4;
+      const targetY = 3.2 - pointerY*0.8 + scrollY*0.004;
+      camera.position.x += (targetX - camera.position.x)*0.04;
+      camera.position.y += (targetY - camera.position.y)*0.04;
+      camera.lookAt(0, 1.4 - scrollY*0.0008, -6);
+      renderer.render(scene, camera);
+    }
+
+    window.addEventListener('resize', ()=>{
+      if(!renderer) return;
+      camera.aspect = innerWidth/innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+
+    /* ============ mentor card mini-canvases ============ */
+    function initMentorCanvases(){
+      document.querySelectorAll('.mentor canvas').forEach(cv=>{
+        const ctx = cv.getContext('2d');
+        const hue = +cv.dataset.hue || 180;
+        function size(){ cv.width = cv.offsetWidth; cv.height = cv.offsetHeight; }
+        size();
+        let f = Math.random()*100;
+        function draw(){
+          f += 0.006;
+          const w = cv.width, h = cv.height;
+          const g = ctx.createLinearGradient(0,0,w,h);
+          g.addColorStop(0, `hsl(${hue}, 45%, 12%)`);
+          g.addColorStop(0.5, `hsl(${hue + Math.sin(f)*10}, 55%, 22%)`);
+          g.addColorStop(1, `hsl(${hue-20}, 40%, 8%)`);
+          ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+          for(let i=0;i<3;i++){
+            const bx = w*(0.5 + 0.4*Math.sin(f*0.8 + i*2));
+            const by = h*(0.5 + 0.4*Math.cos(f*0.6 + i*1.7));
+            const rg = ctx.createRadialGradient(bx,by,0,bx,by,w*0.5);
+            rg.addColorStop(0, `hsla(${hue+i*15}, 70%, 55%, .22)`);
+            rg.addColorStop(1, 'transparent');
+            ctx.fillStyle = rg; ctx.fillRect(0,0,w,h);
+          }
+          if(!reduceMotion) requestAnimationFrame(draw);
+        }
+        draw();
+        window.addEventListener('resize', size);
+      });
+    }
+
+    /* ============ GSAP ============ */
+    function initGSAP(){
+      gsap.registerPlugin(ScrollTrigger);
+
+      const heroLines = gsap.utils.toArray('.hero h1 .ln > span');
+      const heroFades = gsap.utils.toArray('.hero .reveal');
+      window.__heroIn = ()=>{
+        gsap.to(heroLines, {y:0, duration:1.1, ease:'expo.out', stagger:0.09});
+        gsap.to(heroFades, {opacity:1, y:0, duration:1, ease:'power3.out', stagger:0.08, delay:0.25});
+      };
+
+      gsap.utils.toArray('.reveal').forEach(el=>{
+        if(el.closest('.hero')) return;
+        gsap.to(el,{opacity:1, y:0, duration:1, ease:'power3.out',
+          scrollTrigger:{trigger:el, start:'top 85%'}});
+      });
+
+      gsap.to('.progress',{scaleX:1, ease:'none', scrollTrigger:{trigger:document.body, start:'top top', end:'bottom bottom', scrub:0.3}});
+
+      ScrollTrigger.create({trigger:document.body, start:'top top', end:'bottom bottom',
+        onUpdate:self=>{ scrollY = self.scroll(); }});
+
+      gsap.utils.toArray('[data-count]').forEach(el=>{
+        const end = +el.dataset.count;
+        const suffix = el.dataset.suffix || '';
+        const obj = {v:0};
+        el.textContent = '0' + suffix;
+        ScrollTrigger.create({trigger:el, start:'top 88%', once:true,
+          onEnter:()=>gsap.to(obj,{v:end, duration:2, ease:'power2.out',
+            onUpdate:()=>{ el.textContent = Math.round(obj.v).toLocaleString() + suffix; }})});
+      });
+
+      const track = document.getElementById('marquee');
+      if(track){
+        track.innerHTML += track.innerHTML;
+        gsap.to(track,{xPercent:-50, repeat:-1, duration:24, ease:'none'});
+      }
+
+      const steps = gsap.utils.toArray('.step');
+      steps.forEach((step,i)=>{
+        ScrollTrigger.create({trigger:step, start:'top 70%', end:'bottom 60%',
+          onEnter:()=>setActive(i), onEnterBack:()=>setActive(i)});
+      });
+      function setActive(i){
+        steps.forEach((s,j)=>{
+          s.classList.toggle('active', j===i);
+          const bar = s.querySelector('.alt-track i');
+          if(bar) bar.style.width = j<=i ? ((j+1)/steps.length*100)+'%' : '0%';
+        });
+      }
+
+      gsap.utils.toArray('.h2').forEach(h=>{
+        gsap.fromTo(h,{y:20},{y:-20, ease:'none', scrollTrigger:{trigger:h, start:'top bottom', end:'bottom top', scrub:true}});
+      });
+    }
+
+    /* ============ preloader ============ */
+    function runPreloader(){
+      const bar = document.querySelector('.pl-bar i');
+      const count = document.querySelector('.pl-count');
+      const mark = document.querySelector('.pl-mark span');
+      const tl = gsap.timeline();
+      tl.to(mark,{y:0, duration:.9, ease:'expo.out'})
+        .to(bar,{scaleX:1, duration:1.6, ease:'power2.inOut'}, 0.2)
+        .to(count,{duration:1.6, ease:'power2.inOut',
+          onUpdate:function(){ count.textContent = Math.round(this.progress()*100)+'%'; }},0.2)
+        .to('#preloader',{yPercent:-100, duration:.9, ease:'expo.inOut'}, '+=0.15')
+        .add(()=>{ document.body.classList.remove('is-loading'); if(window.__heroIn) window.__heroIn(); }, '-=0.5')
+        .set('#preloader',{display:'none'});
+    }
+
+    /* ============ custom cursor ============ */
+    function initCursor(){
+      if(isMobile) return;
+      const dot = document.querySelector('.cursor-dot');
+      const ring = document.querySelector('.cursor-ring');
+      let mx=innerWidth/2,my=innerHeight/2, rx=mx, ry=my;
+      window.addEventListener('pointermove', e=>{ mx=e.clientX; my=e.clientY; gsap.set(dot,{x:mx,y:my}); });
+      gsap.ticker.add(()=>{ rx += (mx-rx)*0.18; ry += (my-ry)*0.18; gsap.set(ring,{x:rx,y:ry}); });
+      document.querySelectorAll('a,button,.card,.mentor,[data-cta]').forEach(el=>{
+        el.addEventListener('pointerenter',()=>ring.classList.add('is-hover'));
+        el.addEventListener('pointerleave',()=>ring.classList.remove('is-hover'));
+      });
+    }
+
+    /* ============ nav ============ */
+    function initNav(){
+      const nav = document.getElementById('nav');
+      const burger = document.getElementById('burger');
+      const links = document.getElementById('navLinks');
+      const onScroll = ()=>nav.classList.toggle('scrolled', window.scrollY>60);
+      window.addEventListener('scroll', onScroll); onScroll();
+      burger.addEventListener('click',()=>{
+        const open = links.classList.toggle('open');
+        nav.classList.toggle('menu-open', open);
+        burger.setAttribute('aria-expanded', open);
+      });
+      links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+        links.classList.remove('open'); nav.classList.remove('menu-open');
+        burger.setAttribute('aria-expanded','false');
+      }));
+      document.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click',e=>{
+          const id = a.getAttribute('href');
+          if(id.length>1){ const t=document.querySelector(id); if(t){ e.preventDefault();
+            window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-70, behavior:'smooth'}); } }
+        });
+      });
+      // close mobile menu on Escape
+      document.addEventListener('keydown',e=>{ if(e.key==='Escape' && links.classList.contains('open')){
+        links.classList.remove('open'); nav.classList.remove('menu-open'); burger.setAttribute('aria-expanded','false'); burger.focus(); } });
+    }
+
+    /* ============ magnetic buttons ============ */
+    function initMagnetic(){
+      if(isMobile || reduceMotion) return;
+      document.querySelectorAll('[data-cta], .nav-cta').forEach(el=>{
+        el.addEventListener('pointermove',e=>{
+          const r = el.getBoundingClientRect();
+          gsap.to(el,{x:(e.clientX-r.left-r.width/2)*0.3, y:(e.clientY-r.top-r.height/2)*0.4, duration:.4, ease:'power2.out'});
+        });
+        el.addEventListener('pointerleave',()=>gsap.to(el,{x:0,y:0,duration:.5,ease:'elastic.out(1,.4)'}));
+      });
+    }
+
+    /* ============ boot ============ */
+    window.addEventListener('DOMContentLoaded',()=>{
+      let sceneOk = false;
+      try{ sceneOk = initScene(); }catch(e){ console.warn('three.js scene failed, using gradient fallback', e); }
+      if(!sceneOk){ document.getElementById('scene').style.background='radial-gradient(80% 80% at 50% 100%, #0f1b30, #070b14)'; }
+      initMentorCanvases();
+      initGSAP();
+      initCursor();
+      initNav();
+      initMagnetic();
+      if(reduceMotion){
+        document.body.classList.remove('is-loading');
+        document.getElementById('preloader').style.display='none';
+        gsap.set('.hero h1 .ln > span',{y:0});
+        gsap.set('.hero .reveal',{opacity:1,y:0});
+      } else {
+        runPreloader();
+      }
+    });
+  </script>
+</body>
+</html>
