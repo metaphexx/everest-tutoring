@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap');
+/* Brand fonts are self-hosted via next/font (see app/layout.tsx); the variables
+   --font-montserrat / --font-jakarta are injected on <html>. No external font
+   request, so rendering is identical on every machine. */
 @import "tailwindcss";
 
 /* ─── Full design system tokens ──────────────────────────── */
@@ -103,10 +105,12 @@
   --accent-coral:  255,122,89;
   --accent-amber:  245,166,35;
 
-  /* Type families */
-  --font-display: 'Gotham', 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  --font-body:    'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-ui:      'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  /* Type families - self-hosted via next/font (app/layout.tsx). The --font-*
+     variables below are the single source of truth; every component references
+     them through var(--font-display/body/ui). Do not hardcode font names. */
+  --font-display: var(--font-montserrat), 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-body:    var(--font-jakarta), 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-ui:      var(--font-jakarta), 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
   --font-mono:    'JetBrains Mono', ui-monospace, monospace;
 
   /* Shadows */

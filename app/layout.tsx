@@ -1,8 +1,16 @@
 import type { Metadata, Viewport } from 'next'
+import { Montserrat, Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import FacebookPixel from '@/components/analytics/FacebookPixel'
 import ScrollPerf from '@/components/perf/ScrollPerf'
 import { Toaster } from '@/components/ui/toaster'
+
+// Self-hosted via next/font so the exact brand fonts ship with the build - no
+// dependency on Google Fonts being reachable, no fallback-font flash, identical
+// rendering on every machine. The CSS variables feed --font-display / --font-body
+// in globals.css. (Display was historically Montserrat; "Gotham" was never bundled.)
+const fontDisplay = Montserrat({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800', '900'], variable: '--font-montserrat', display: 'swap' })
+const fontBody = Plus_Jakarta_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800'], variable: '--font-jakarta', display: 'swap' })
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://everesttutoring.com.au'
 
@@ -80,7 +88,7 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-AU" className="h-full scroll-smooth" data-scroll-behavior="smooth">
+    <html lang="en-AU" className={`h-full scroll-smooth ${fontDisplay.variable} ${fontBody.variable}`} data-scroll-behavior="smooth">
       <body className="min-h-full antialiased">
         {children}
         <script

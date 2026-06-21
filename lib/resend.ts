@@ -1,4 +1,5 @@
 import { Resend } from 'resend'
+import { renderBrandedEmail } from '@/lib/email-template'
 
 export const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -101,23 +102,16 @@ export async function sendReminderEmail(params: {
   })
 }
 
-// Generic branded email (used for admin broadcasts / announcements).
-export async function sendEmail(params: { to: string; subject: string; text: string }) {
+// Generic branded email used by every outbound message (reminders, win-backs,
+// waitlist offers, moderation notices, class changes…). Renders through the
+// shared branded template (lib/email-template.ts) so all of them look identical
+// and on-brand. Callers keep passing plain `text`; `heading` and `cta` are
+// optional upgrades.
+export async function sendEmail(params: { to: string; subject: string; text: string; heading?: string; cta?: { label: string; url: string }; preheader?: string }) {
   return resend.emails.send({
     from: `${process.env.FROM_NAME} <${process.env.FROM_EMAIL}>`,
     to: params.to,
     subject: params.subject,
-    html: `
-      <!DOCTYPE html>
-      <html>
-      <body style="font-family: Arial, sans-serif; background: #f8fafb; margin: 0; padding: 40px 20px;">
-        <div style="max-width: 520px; margin: 0 auto; background: white; border-radius: 16px; padding: 32px; box-shadow: 0 4px 24px rgba(0,32,63,0.08);">
-          <p style="color: #009dff; font-weight: 700; margin: 0 0 14px;">Everest Tutoring × HSHS</p>
-          <div style="color: #475569; line-height: 1.7; white-space: pre-wrap;">${params.text}</div>
-          <p style="color: #94a3b8; font-size: 12px; margin-top: 24px;">everesttutoring.com.au</p>
-        </div>
-      </body>
-      </html>
-    `,
+    html: renderBrandedEmail({ subject: params.subject, bodyText: params.text, heading: params.heading, cta: params.cta, preheader: params.preheader }),
   })
 }
