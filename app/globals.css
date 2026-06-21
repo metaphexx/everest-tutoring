@@ -1,5 +1,5 @@
 /* Brand fonts are self-hosted via next/font (see app/layout.tsx); the variables
-   --font-montserrat / --font-jakarta are injected on <html>. No external font
+   --font-montserrat / --font-inter are injected on <html>. No external font
    request, so rendering is identical on every machine. */
 @import "tailwindcss";
 
@@ -109,8 +109,8 @@
      variables below are the single source of truth; every component references
      them through var(--font-display/body/ui). Do not hardcode font names. */
   --font-display: var(--font-montserrat), 'Montserrat', ui-sans-serif, system-ui, sans-serif;
-  --font-body:    var(--font-jakarta), 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-ui:      var(--font-jakarta), 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-body:    var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-ui:      var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-mono:    'JetBrains Mono', ui-monospace, monospace;
 
   /* Shadows */

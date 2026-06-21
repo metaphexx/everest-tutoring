@@ -126,7 +126,7 @@ that way. Full spec in [DESIGN.md](DESIGN.md).
 
 **What guarantees fidelity (already in place):**
 1. **Fonts are self-hosted** via `next/font` in `app/layout.tsx` — **Montserrat**
-   (display/headings) and **Plus Jakarta Sans** (body/UI). They ship inside the
+   (display/headings) and **Inter** (body/UI). They ship inside the
    build; there's no Google-Fonts request to be slow or blocked, and next/font
    adds size-adjusted fallbacks so there's no layout shift. *(The old stack listed
    a paid "Gotham" first that was never bundled and silently fell back — that

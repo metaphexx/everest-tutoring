@@ -21,7 +21,7 @@ Tutor/Admin portals + a read-only HSHS school portal, with a CRM, an AI assistan
 The owner cares deeply about design and was previously burned by a handoff that
 drifted (wrong fonts/spacing/colours). Fidelity is enforced by structure — keep it:
 - **Fonts** are self-hosted via `next/font` in `app/layout.tsx` (Montserrat
-  display, Plus Jakarta Sans body). Reference `var(--font-display|body|ui)` only;
+  display, Inter body). Reference `var(--font-display|body|ui)` only;
   never hardcode a font name.
 - **All colours/spacing/radii/shadows are tokens** in `app/globals.css :root`
   (`--brand-*`, `--ink-*`, `--navy-*`, `--glass-bg`, `--hairline`, `--ring`, …).

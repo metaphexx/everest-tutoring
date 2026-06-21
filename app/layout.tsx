@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Montserrat, Plus_Jakarta_Sans } from 'next/font/google'
+import { Montserrat, Inter } from 'next/font/google'
 import './globals.css'
 import FacebookPixel from '@/components/analytics/FacebookPixel'
 import ScrollPerf from '@/components/perf/ScrollPerf'
@@ -8,9 +8,10 @@ import { Toaster } from '@/components/ui/toaster'
 // Self-hosted via next/font so the exact brand fonts ship with the build - no
 // dependency on Google Fonts being reachable, no fallback-font flash, identical
 // rendering on every machine. The CSS variables feed --font-display / --font-body
-// in globals.css. (Display was historically Montserrat; "Gotham" was never bundled.)
+// in globals.css. Headings use Montserrat; body uses Inter (a clean,
+// self-hostable near-twin of the San Francisco "system font" look).
 const fontDisplay = Montserrat({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800', '900'], variable: '--font-montserrat', display: 'swap' })
-const fontBody = Plus_Jakarta_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800'], variable: '--font-jakarta', display: 'swap' })
+const fontBody = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-inter', display: 'swap' })
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://everesttutoring.com.au'
 

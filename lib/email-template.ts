@@ -58,7 +58,7 @@ export function renderBrandedEmail(opts: EmailOptions): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(opts.subject)}</title></head>
-<body style="margin:0;padding:0;background:${BRAND.page};font-family:'Plus Jakarta Sans',Arial,sans-serif;">
+<body style="margin:0;padding:0;background:${BRAND.page};font-family:'Inter',Arial,sans-serif;">
   ${preheader}
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${BRAND.page};padding:32px 16px;">
     <tr><td align="center">
