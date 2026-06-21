@@ -11,10 +11,50 @@ import { sendEmail } from '@/lib/resend'
 export type ModKind = 'message' | 'question' | 'reply' | 'document' | 'announcement'
 export type ModAction = 'approve' | 'resolve' | 'escalate'
 
+// Map an AI flag category to an Incident category + a sensible default severity.
+function incidentCategoryFor(flagCategory: string | null | undefined): { category: string; severity: string } {
+  switch (flagCategory) {
+    case 'safeguarding': return { category: 'safeguarding', severity: 'high' }
+    case 'abuse': return { category: 'behaviour', severity: 'high' }
+    case 'poaching': return { category: 'other', severity: 'medium' }
+    default: return { category: 'other', severity: 'medium' }
+  }
+}
+
+type FlaggedSummary = { studentName: string | null; detail: string; flagCategory: string | null; flagSeverity: string | null }
+
+// Pull a short, safe summary of the flagged item for an incident record.
+async function summariseFlagged(kind: ModKind, id: string): Promise<FlaggedSummary> {
+  if (kind === 'message') {
+    const m = await prisma.message.findUnique({
+      where: { id },
+      select: { body: true, flagCategory: true, flagSeverity: true, flagReason: true, sender: { select: { name: true, role: true } }, conversation: { select: { student: { select: { firstName: true } } } } },
+    })
+    return {
+      studentName: m?.conversation?.student?.firstName ?? null,
+      detail: `Flagged ${m?.flagCategory ?? 'message'} from ${m?.sender?.name ?? 'a user'} (${m?.sender?.role ?? '?'}). ${m?.flagReason ?? ''} Content: "${(m?.body ?? '').slice(0, 200)}"`.trim(),
+      flagCategory: m?.flagCategory ?? null,
+      flagSeverity: m?.flagSeverity ?? null,
+    }
+  }
+  if (kind === 'question' || kind === 'reply') {
+    const item = kind === 'question'
+      ? await prisma.question.findUnique({ where: { id }, select: { body: true, student: { select: { firstName: true } } } })
+      : await prisma.questionReply.findUnique({ where: { id }, select: { body: true, question: { select: { student: { select: { firstName: true } } } } } })
+    const studentName = kind === 'question'
+      ? (item as { student?: { firstName?: string } } | null)?.student?.firstName ?? null
+      : (item as { question?: { student?: { firstName?: string } } } | null)?.question?.student?.firstName ?? null
+    return { studentName, detail: `Flagged ${kind}. Content: "${((item as { body?: string } | null)?.body ?? '').slice(0, 200)}"`, flagCategory: null, flagSeverity: null }
+  }
+  return { studentName: null, detail: `Flagged ${kind} (${id.slice(0, 8)}) escalated from moderation.`, flagCategory: null, flagSeverity: null }
+}
+
 // Admin decision on a flagged/held item.
 //  - approve: it is safe; make it visible and clear the flag.
 //  - resolve: acknowledged; mark reviewed (held items stay withheld).
-//  - escalate: needs further attention; flag for follow-up and re-alert.
+//  - escalate: opens a safeguarding/behaviour Incident (/admin/incidents) and
+//    alerts the safeguarding lead (email when SAFEGUARDING_LEAD_EMAIL is set),
+//    plus the in-CRM notification. A real workflow, not just a re-ping.
 export async function moderateAction(input: { kind: ModKind; id: string; action: ModAction }) {
   const admin = await requireUser(['admin'])
   const { kind, id, action } = input
@@ -45,11 +85,47 @@ export async function moderateAction(input: { kind: ModKind; id: string; action:
   }
 
   await logAudit({ actorId: admin.id, actorName: admin.name, action: `moderation.${action}`, target: `${kind}:${id}` })
+
+  // Escalate now does real work: it opens a safeguarding/behaviour Incident
+  // (visible at /admin/incidents) and alerts the safeguarding lead by email when
+  // SAFEGUARDING_LEAD_EMAIL is configured, on top of the in-CRM notification.
   if (action === 'escalate') {
-    await notifyAdmin({ type: 'flag', title: `Escalated ${kind} for review`, body: `Marked for follow-up by ${admin.name ?? 'admin'}.`, href: '/admin/moderation', refKey: `escalate:${kind}:${id}:${Date.now()}` })
+    const summary = await summariseFlagged(kind, id)
+    const { category, severity } = incidentCategoryFor(summary.flagCategory)
+    const inc = await prisma.incident.create({
+      data: {
+        studentName: summary.studentName,
+        category,
+        severity: summary.flagSeverity ?? severity,
+        details: `Escalated from moderation by ${admin.name ?? 'admin'}. ${summary.detail}`,
+        status: 'open',
+        reportedById: admin.id,
+      },
+    })
+    await logAudit({ actorId: admin.id, actorName: admin.name, action: 'incident.openFromModeration', target: inc.id, detail: `${category} / ${kind}` })
+
+    const lead = process.env.SAFEGUARDING_LEAD_EMAIL
+    if (lead && hasResend) {
+      try {
+        await sendEmail({
+          to: lead,
+          subject: `[Everest safeguarding] ${category} incident opened from moderation`,
+          text: `A ${category} incident (severity ${summary.flagSeverity ?? severity}) was escalated from the moderation queue by ${admin.name ?? 'admin'}.\n\n${summary.detail}\n\nReview it: ${process.env.NEXT_PUBLIC_APP_URL ?? ''}/admin/incidents`,
+        })
+      } catch { /* lead email is best-effort; the incident + in-CRM alert still stand */ }
+    }
+
+    await notifyAdmin({
+      type: 'flag',
+      title: `Incident opened from moderation: ${category}`,
+      body: `${summary.detail.slice(0, 100)}${lead && hasResend ? ' · safeguarding lead emailed.' : ''}`,
+      href: '/admin/incidents',
+      refKey: `escalate-incident:${kind}:${id}:${Date.now()}`,
+    })
   }
 
   revalidatePath('/admin/moderation')
+  revalidatePath('/admin/incidents')
   return { ok: true }
 }
 

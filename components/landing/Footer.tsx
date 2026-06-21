@@ -18,7 +18,7 @@ const COMPANY = [
 
 const PARENTS = [
   { href: '/book',       label: 'Enrol for Term 3' },
-  { href: '/dashboard',  label: 'Parent portal' },
+  { href: '/login',      label: 'Sign in' },
   { href: 'https://everesttutoring.com.au/terms-conditions-including-refund-cancellation-policy/', label: 'Terms and conditions' },
   { href: '#',           label: 'Privacy' },
 ]

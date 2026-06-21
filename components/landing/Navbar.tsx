@@ -56,7 +56,7 @@ export default function Navbar() {
 
         <div className="cta-row">
           <Link href="/login" className="btn btn-secondary nav-portal-btn">
-            <UserRound size={15} /> Parent portal
+            <UserRound size={15} /> Sign in
           </Link>
           <Link href="/book" className="btn btn-primary nav-book-btn">
             Book now <ArrowRight size={16} />
@@ -111,7 +111,7 @@ export default function Navbar() {
             onClick={() => setOpen(false)}
             tabIndex={open ? 0 : -1}
           >
-            <UserRound size={15} /> Parent portal
+            <UserRound size={15} /> Sign in
           </Link>
         </div>
       </div>
