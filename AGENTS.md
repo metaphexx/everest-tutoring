@@ -15,6 +15,7 @@ Tutor/Admin portals + a read-only HSHS school portal, with a CRM, an AI assistan
 - **HANDOFF.md** — setup, deploy, what's done/pending, and the UI-fidelity rules.
 - **FEATURES.md** — every feature and how it works (your map of the system).
 - **DESIGN.md** — the design system spec.
+- **PORTAL_DASHBOARDS.md** — how to build new portal dashboards on the existing visual language.
 - **DEV_NOTES.md** — integration setup + remaining to-dos.
 
 ## The #1 rule: do not change how the UI looks

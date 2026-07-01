@@ -7,6 +7,7 @@ This is the master handoff. Read this first, then the linked docs.
 | **HANDOFF.md** (this) | How to get the code, set up, deploy, what's done/pending, and the UI-fidelity contract |
 | [FEATURES.md](FEATURES.md) | Every feature in the system and exactly how it works |
 | [DESIGN.md](DESIGN.md) | The design system spec (colours, type, components) |
+| [PORTAL_DASHBOARDS.md](PORTAL_DASHBOARDS.md) | How to build new portal dashboards on the existing visual language |
 | [DEV_NOTES.md](DEV_NOTES.md) | Integration-specific setup notes (Drive, Postgres, Sentry, inbound, credentials) |
 | [PRODUCT.md](PRODUCT.md) | Product purpose, users, brand personality |
 | [AGENTS.md](AGENTS.md) | Brief for an AI coding agent (most devs here use Claude) |
